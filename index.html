@@ -12,18 +12,18 @@
     <!-- ========== GOOGLE SITE VERIFICATION ========== -->
     <meta name="google-site-verification" content="google1ed78932edb61fb6" />
 
-    <!-- ========== FAVICON (gold 'B' – not emoji) ========== -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='85' font-weight='bold' font-family='Georgia,serif' fill='%23D4AF37' text-anchor='middle' x='50%' y='75%'>B</text></svg>" />
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='85' font-weight='bold' font-family='Georgia,serif' fill='%23D4AF37' text-anchor='middle' x='50%' y='75%'>B</text></svg>" />
+    <!-- ========== FAVICON (Cake Emoji) ========== -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧁</text></svg>" />
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧁</text></svg>" />
 
-    <!-- ========== OPEN GRAPH (social sharing) ========== -->
+    <!-- ========== OPEN GRAPH ========== -->
     <meta property="og:title" content="Bridget's Bakery | Artisan Cakes &amp; Cupcakes in Nairobi" />
     <meta property="og:description" content="Order artisan cakes, cupcakes, and cookies from Chef Briget. Custom orders available." />
     <meta property="og:url" content="https://shiimaina.github.io/Bridgets-Bakery/" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://i.ibb.co/N8mfhBP/bridgets-log.png" />
 
-    <!-- ========== STRUCTURED DATA (JSON-LD) ========== -->
+    <!-- ========== STRUCTURED DATA ========== -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -314,7 +314,7 @@
             transform: translateY(-8px) scale(1.01);
             box-shadow: var(--shadow-gold), var(--shadow-dark);
         }
-        /* Product image styling */
+        /* ===== PRODUCT IMAGES – NO CROPPING ON MOBILE ===== */
         .product-image {
             width: 100%;
             height: 220px;
@@ -517,6 +517,8 @@
         .copyright span {
             color: var(--gold);
         }
+
+        /* ===== RESPONSIVE IMAGE FIX ===== */
         @media (max-width: 768px) {
             .hero-content h1 { font-size: 2.6rem; }
             .top-bar { flex-direction: column; align-items: center; }
@@ -532,9 +534,13 @@
             .hero-description { margin-left: auto; margin-right: auto; }
             .footer-buttons { justify-content: center; }
             .hero::before, .hero::after { font-size: 3rem; opacity: 0.3; letter-spacing: 30px; }
-            .product-image { height: 180px; }
             .products-grid { grid-template-columns: 1fr 1fr; }
+            .product-image {
+                height: 180px;
+                object-fit: cover;
+            }
         }
+
         @media (max-width: 480px) {
             .hero-content h1 { font-size: 2rem; }
             .container { padding: 0 16px; }
@@ -542,7 +548,16 @@
             .nav-links { gap: 14px; }
             .nav-links a { font-size: 0.8rem; letter-spacing: 1px; }
             .products-grid { grid-template-columns: 1fr; }
-            .product-image { height: 200px; }
+            /* ===== FIX: On mobile, show full image without cropping ===== */
+            .product-image {
+                height: auto;
+                aspect-ratio: 4 / 3;
+                object-fit: contain;
+                max-height: 280px;
+                width: 100%;
+                background: var(--black-soft);
+                border-radius: 16px 6px 16px 6px;
+            }
         }
     </style>
 </head>
