@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pure Golden Bliss · Artisan Bakery</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ============================================================
+           GOLD & BLACK THEME — CINEMATIC BAKERY
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F5D061;
+            --gold-glow: #E8C84A;
+            --black: #0B0B0B;
+            --black-soft: #1A1A1A;
+            --black-card: #151515;
+            --white: #F8F6F0;
+            --shadow-gold: 0 8px 40px rgba(212, 175, 55, 0.2);
+            --shadow-dark: 0 12px 50px rgba(0, 0, 0, 0.8);
+            --whatsapp-green: #25D366;
+            --call-gold: #D4AF37;
+        }
+
+        body {
+            background-color: var(--black);
+            color: var(--white);
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ----- CINEMATIC TOP BAR (no call/order buttons) ----- */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0 14px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+            flex-wrap: wrap;
+            gap: 12px;
+            background: linear-gradient(180deg, rgba(11, 11, 11, 0.95) 0%, transparent 100%);
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+        }
+        .brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+        }
+        .brand-name span {
+            color: var(--gold);
+            text-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+        }
+        .brand-tagline {
+            font-size: 0.65rem;
+            letter-spacing: 6px;
+            color: var(--gold);
+            font-weight: 300;
+            margin-top: 2px;
+            opacity: 0.8;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #d4c9b5;
+            font-weight: 400;
+            font-size: 0.9rem;
+            transition: 0.25s;
+            letter-spacing: 2px;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* ----- HERO — CINEMATIC WITH CAKE GRAPHICS ----- */
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            padding: 40px 0 60px;
+            gap: 40px;
+            position: relative;
+            min-height: 70vh;
+        }
+
+        /* cake graphic overlay (floating cakes) */
+        .hero::before {
+            content: '\f1c0  \f1c0  \f1c0  \f1c0';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 6rem;
+            color: rgba(212, 175, 55, 0.04);
+            position: absolute;
+            top: -20%;
+            right: -10%;
+            white-space: nowrap;
+            pointer-events: none;
+            transform: rotate(-12deg);
+            letter-spacing: 80px;
+            z-index: 0;
+        }
+        .hero::after {
+            content: '\f1c0  \f1c0  \f1c0';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 4.5rem;
+            color: rgba(212, 175, 55, 0.03);
+            position: absolute;
+            bottom: 10%;
+            left: -8%;
+            white-space: nowrap;
+            pointer-events: none;
+            transform: rotate(8deg);
+            letter-spacing: 60px;
+            z-index: 0;
+        }
+
+        .hero-content {
+            flex: 1.2;
+            min-width: 280px;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 6px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            opacity: 0.8;
+        }
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4.4rem;
+            line-height: 1.05;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 12px;
+            text-shadow: 0 4px 40px rgba(0, 0, 0, 0.6);
+        }
+        .hero-gold {
+            color: var(--gold);
+            font-style: italic;
+            text-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
+        }
+        .hero-description {
+            font-size: 1.1rem;
+            color: #b5aa95;
+            max-width: 500px;
+            margin: 20px 0 32px;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-image {
+            flex: 1;
+            min-width: 220px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            background: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.06), transparent 70%);
+            padding: 20px 10px;
+            border-radius: 60px 20px 60px 20px;
+            border: 1px solid rgba(212, 175, 55, 0.10);
+            box-shadow: var(--shadow-gold);
+            backdrop-filter: blur(2px);
+        }
+        .hero-image img {
+            max-width: 85%;
+            height: auto;
+            filter: drop-shadow(0 8px 40px rgba(212, 175, 55, 0.25));
+            transition: transform 0.5s ease;
+        }
+        .hero-image img:hover {
+            transform: scale(1.02);
+        }
+        .hero-chef-tag {
+            margin-top: 12px;
+            color: var(--gold);
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            letter-spacing: 3px;
+            opacity: 0.7;
+        }
+
+        /* decorative cake icons scattered */
+        .cake-bg-icon {
+            position: absolute;
+            font-size: 3rem;
+            color: rgba(212, 175, 55, 0.05);
+            pointer-events: none;
+        }
+
+        /* ----- Section Titles ----- */
+        .section-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+        }
+        .section-title span {
+            color: var(--gold);
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+        }
+        .section-sub {
+            text-align: center;
+            color: #a0927a;
+            margin-bottom: 48px;
+            letter-spacing: 3px;
+            font-weight: 300;
+        }
+        .gold-divider {
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 10px auto 30px;
+        }
+
+        /* ----- Product Grid ----- */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+            margin: 40px 0 20px;
+        }
+
+        .product-card {
+            background: var(--black-card);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 32px 16px 32px 16px;
+            padding: 32px 20px 28px;
+            text-align: center;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .product-card::before {
+            content: '\f1c0';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 6rem;
+            color: rgba(212, 175, 55, 0.03);
+            position: absolute;
+            bottom: -20px;
+            right: -20px;
+            transform: rotate(10deg);
+            pointer-events: none;
+        }
+        .product-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: var(--shadow-gold), var(--shadow-dark);
+        }
+        .product-icon {
+            font-size: 3.2rem;
+            color: var(--gold);
+            margin-bottom: 16px;
+            background: rgba(212, 175, 55, 0.08);
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            transition: 0.3s;
+        }
+        .product-card:hover .product-icon {
+            background: rgba(212, 175, 55, 0.18);
+            border-color: var(--gold);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
+        }
+        .product-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .product-card p {
+            color: #b3a48b;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        /* WhatsApp Inquiry Button (gold aesthetic) */
+        .btn-wa {
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+            margin-top: 8px;
+            letter-spacing: 1px;
+        }
+        .btn-wa i {
+            font-size: 1.2rem;
+        }
+        .btn-wa:hover {
+            background: var(--gold);
+            color: var(--black);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            transform: scale(1.02);
+        }
+
+        /* ----- FLOATING CALL BUTTON (matches gold/black aesthetic) ----- */
+        .float-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            z-index: 999;
+        }
+        .float-btn {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #fff;
+            text-decoration: none;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(6px);
+        }
+        .float-btn:hover {
+            transform: scale(1.08) translateY(-3px);
+        }
+        /* WhatsApp float — green with gold glow */
+        .float-wa {
+            background: rgba(37, 211, 102, 0.9);
+            border-color: var(--gold);
+            box-shadow: 0 4px 30px rgba(37, 211, 102, 0.25), 0 0 20px rgba(212, 175, 55, 0.1);
+        }
+        .float-wa:hover {
+            background: #20b85a;
+            box-shadow: 0 4px 40px rgba(37, 211, 102, 0.4), 0 0 30px rgba(212, 175, 55, 0.2);
+        }
+        /* Call float — gold/black with subtle gold glow */
+        .float-call {
+            background: rgba(212, 175, 55, 0.85);
+            border-color: var(--gold);
+            box-shadow: 0 4px 30px rgba(212, 175, 55, 0.2), 0 0 20px rgba(212, 175, 55, 0.05);
+            color: #0B0B0B;
+        }
+        .float-call:hover {
+            background: var(--gold);
+            box-shadow: 0 4px 40px rgba(212, 175, 55, 0.4), 0 0 30px rgba(212, 175, 55, 0.2);
+            color: #000;
+        }
+
+        /* ----- Footer ----- */
+        footer {
+            margin-top: 80px;
+            border-top: 1px solid rgba(212, 175, 55, 0.12);
+            padding: 48px 0 24px;
+            background: #050505;
+        }
+        .footer-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 32px;
+        }
+        .footer-col h4 {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+        }
+        .footer-col p,
+        .footer-col a {
+            color: #a6977d;
+            text-decoration: none;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            transition: 0.2s;
+        }
+        .footer-col a:hover {
+            color: var(--gold);
+        }
+        .footer-social {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .footer-social a {
+            font-size: 1.6rem;
+            color: #a6977d;
+            transition: 0.3s;
+            display: inline-block;
+        }
+        .footer-social a:hover {
+            color: var(--gold);
+            transform: scale(1.1);
+        }
+        .footer-buttons {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        .footer-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: 0.3s;
+            border: 2px solid transparent;
+            letter-spacing: 0.5px;
+        }
+        .footer-btn-wa {
+            background: var(--whatsapp-green);
+            color: #fff;
+            border-color: var(--whatsapp-green);
+        }
+        .footer-btn-wa:hover {
+            background: transparent;
+            color: var(--whatsapp-green);
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.15);
+        }
+        .footer-btn-call {
+            background: var(--gold);
+            color: #0B0B0B;
+            border-color: var(--gold);
+        }
+        .footer-btn-call:hover {
+            background: transparent;
+            color: var(--gold);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+        }
+        .copyright {
+            text-align: center;
+            margin-top: 48px;
+            color: #5c5342;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        .copyright span {
+            color: var(--gold);
+        }
+
+        /* ----- Responsive ----- */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.6rem;
+            }
+            .top-bar {
+                flex-direction: column;
+                align-items: center;
+                padding: 16px 0 12px;
+            }
+            .nav-links {
+                gap: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .section-title {
+                font-size: 2.2rem;
+            }
+            .float-buttons {
+                bottom: 20px;
+                right: 20px;
+                gap: 12px;
+            }
+            .float-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.7rem;
+            }
+            .brand-name {
+                font-size: 1.5rem;
+                text-align: center;
+            }
+            .brand-tagline {
+                text-align: center;
+            }
+            .footer-grid {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .footer-social {
+                justify-content: center;
+            }
+            .hero {
+                flex-direction: column-reverse;
+                text-align: center;
+                padding: 20px 0 40px;
+                min-height: auto;
+            }
+            .hero-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .footer-buttons {
+                justify-content: center;
+            }
+            .hero::before,
+            .hero::after {
+                font-size: 3rem;
+                opacity: 0.3;
+                letter-spacing: 30px;
+            }
+        }
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            .container {
+                padding: 0 16px;
+            }
+            .product-card {
+                padding: 24px 14px;
+            }
+            .nav-links {
+                gap: 14px;
+            }
+            .nav-links a {
+                font-size: 0.8rem;
+                letter-spacing: 1px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== TOP BAR (cinematic, no call/order buttons) ========== -->
+    <div class="container">
+        <div class="top-bar">
+            <div class="brand">
+                <div class="brand-name">PURE <span>GOLDEN</span> BLISS</div>
+                <div class="brand-tagline">ARTISAN BAKED GOODS</div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#products">Our Cakes</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ========== HERO — CINEMATIC WITH CAKE GRAPHICS ========== -->
+    <div class="container">
+        <div class="hero">
+            <div class="hero-content">
+                <div class="hero-badge"><i class="fas fa-crown"></i> PURE · GOLDEN · BLISS</div>
+                <h1>Where every bite is <br /><span class="hero-gold">Golden Joy</span></h1>
+                <p class="hero-description">
+                    Artisanal baked goods crafted with passion and the finest ingredients.
+                    From our kitchen to yours — pure indulgence.
+                </p>
+                <a href="#products" style="display: inline-block; background: transparent; color: var(--gold); padding: 14px 40px; border-radius: 40px; font-weight: 700; text-decoration: none; transition: 0.3s; border: 2px solid var(--gold); letter-spacing: 1.5px; box-shadow: 0 0 30px rgba(212, 175, 55, 0.05);">
+                    <i class="fas fa-cupcake"></i> Explore treats
+                </a>
+            </div>
+            <div class="hero-image">
+                <img src="https://i.ibb.co/N8mfhBP/bridgets-log.png" alt="Pure Golden Bliss - Chef Briget Logo" />
+                <div class="hero-chef-tag">
+                    <i class="fas fa-star" style="color: var(--gold);"></i> Chef Briget <i class="fas fa-star" style="color: var(--gold);"></i>
+                </div>
+            </div>
+            <!-- subtle cake icons in background (cinematic) -->
+            <div class="cake-bg-icon" style="top: 10%; left: 5%; font-size: 4.5rem; opacity: 0.04;"><i class="fas fa-cake"></i></div>
+            <div class="cake-bg-icon" style="bottom: 15%; right: 8%; font-size: 3.8rem; opacity: 0.04;"><i class="fas fa-birthday-cake"></i></div>
+        </div>
+    </div>
+
+    <!-- ========== PRODUCTS ========== -->
+    <div class="container" id="products">
+        <div style="margin-top: 60px;">
+            <h2 class="section-title">Our <span>Golden</span> Collection</h2>
+            <div class="gold-divider"></div>
+            <p class="section-sub">Handcrafted with love — Click below to inquire on WhatsApp</p>
+        </div>
+
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-icon"><i class="fas fa-cupcake"></i></div>
+                <h3>Cupcakes</h3>
+                <p>Fluffy, moist, and topped with golden buttercream. Pure bliss in every bite.</p>
+                <button class="btn-wa" onclick="whatsappInquiry('CUPCAKES')">
+                    <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
+                </button>
+            </div>
+            <div class="product-card">
+                <div class="product-icon"><i class="fas fa-cookie-bite"></i></div>
+                <h3>Cookies</h3>
+                <p>Chewy, rich, and packed with premium chocolate chips. A classic golden treat.</p>
+                <button class="btn-wa" onclick="whatsappInquiry('COOKIES')">
+                    <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
+                </button>
+            </div>
+            <div class="product-card">
+                <div class="product-icon"><i class="fas fa-champagne-glasses"></i></div>
+                <h3>Event Cakes</h3>
+                <p>Grand, elegant cakes tailored for weddings, parties, and corporate events.</p>
+                <button class="btn-wa" onclick="whatsappInquiry('EVENT CAKES')">
+                    <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
+                </button>
+            </div>
+            <div class="product-card">
+                <div class="product-icon"><i class="fas fa-birthday-cake"></i></div>
+                <h3>Birthday Cakes</h3>
+                <p>Custom-designed birthday cakes, made to make your celebration unforgettable.</p>
+                <button class="btn-wa" onclick="whatsappInquiry('BIRTHDAY CAKES')">
+                    <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== ABOUT ========== -->
+    <div class="container" id="about">
+        <div style="margin: 70px 0; background: var(--black-soft); border-radius: 40px; padding: 48px 32px; border: 1px solid rgba(212, 175, 55, 0.10); box-shadow: var(--shadow-gold);">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 40px;">
+                <div style="flex: 1;">
+                    <h3 style="font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold);">
+                        <i class="fas fa-utensils"></i> Chef Briget
+                    </h3>
+                    <p style="font-size: 1.1rem; color: #d4c9b5; margin: 16px 0;">
+                        <em>“Crafted with Passion, Served with Love.”</em>
+                    </p>
+                    <p style="color: #b5aa95;">
+                        With years of artisanal baking experience, Chef Briget brings together the finest ingredients
+                        to create golden, unforgettable treats. Every cake, cookie, and cupcake tells a story of warmth
+                        and dedication.
+                    </p>
+                    <div style="margin-top: 20px; display: flex; gap: 20px; flex-wrap: wrap;">
+                        <span style="background: rgba(212, 175, 55, 0.12); padding: 6px 18px; border-radius: 30px; color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.15);"><i class="fas fa-check"></i> Pure ingredients</span>
+                        <span style="background: rgba(212, 175, 55, 0.12); padding: 6px 18px; border-radius: 30px; color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.15);"><i class="fas fa-check"></i> Small batches</span>
+                        <span style="background: rgba(212, 175, 55, 0.12); padding: 6px 18px; border-radius: 30px; color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.15);"><i class="fas fa-check"></i> Gold standard</span>
+                    </div>
+                </div>
+                <div style="flex: 0.5; text-align: center; background: radial-gradient(circle, #1f1a0e, #0b0b0b); padding: 30px; border-radius: 40px; border: 1px solid rgba(212, 175, 55, 0.15);">
+                    <i class="fas fa-user-chef" style="font-size: 5rem; color: var(--gold);"></i>
+                    <div style="color: var(--gold); font-weight: 600; margin-top: 8px; letter-spacing: 2px;">MASTER ARTISAN</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== FOOTER ========== -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Pure Golden Bliss</h4>
+                    <p>Artisan Bakery by Chef Briget</p>
+                    <p><i class="fas fa-map-pin" style="color: var(--gold);"></i> Nairobi, Kenya</p>
+                    <p><i class="fas fa-phone-alt" style="color: var(--gold);"></i> +254 790 499261</p>
+                    <p>
+                        <i class="fas fa-envelope" style="color: var(--gold);"></i>
+                        <a href="mailto:shiimaina106@gmail.com">shiimaina106@gmail.com</a>
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Opening Hours</h4>
+                    <p>Mon – Sat: 8:00 am – 8:00 pm</p>
+                    <p>Sunday: 9:00 am – 4:00 pm</p>
+                    <p style="color: var(--gold);"><i class="fas fa-cupcake"></i> Fresh daily</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Connect with us</h4>
+                    <div class="footer-social">
+                        <a href="https://www.instagram.com/b._mist/#" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" onclick="whatsappInquiry('general')" aria-label="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="tel:+254790499261" aria-label="Call">
+                            <i class="fas fa-phone-alt"></i>
+                        </a>
+                    </div>
+                    <div class="footer-buttons">
+                        <a href="#" onclick="whatsappInquiry('general')" class="footer-btn footer-btn-wa">
+                            <i class="fab fa-whatsapp"></i> WhatsApp
+                        </a>
+                        <a href="tel:+254790499261" class="footer-btn footer-btn-call">
+                            <i class="fas fa-phone-alt"></i> Call
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2026 <span>Pure Golden Bliss</span> — Artisan Baked Goods. Made with passion &amp; the finest ingredients.
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========== FLOATING BUTTONS (gold/black aesthetic) ========== -->
+    <div class="float-buttons">
+        <!-- Call Button — gold themed -->
+        <a href="tel:+254790499261" class="float-btn float-call" aria-label="Call us">
+            <i class="fas fa-phone-alt"></i>
+        </a>
+        <!-- WhatsApp Button — green with gold glow -->
+        <a href="#" class="float-btn float-wa" id="floatWaBtn" target="_blank" rel="noopener" aria-label="WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <!-- ========== JAVASCRIPT ========== -->
+    <script>
+        // --- Your WhatsApp number ---
+        const PHONE_NUMBER = '254790499261';
+
+        function getWhatsAppUrl(message) {
+            const encoded = encodeURIComponent(message);
+            return `https://wa.me/${PHONE_NUMBER}?text=${encoded}`;
+        }
+
+        function whatsappInquiry(productType) {
+            let message = '';
+            switch (productType.toUpperCase()) {
+                case 'CUPCAKES':
+                    message = 'Hello Chef Briget, I am interested in ordering *CUPCAKES*. Please share your menu and prices. Thank you!';
+                    break;
+                case 'COOKIES':
+                    message = 'Hello Chef Briget, I am interested in ordering *COOKIES*. Please share your menu and prices. Thank you!';
+                    break;
+                case 'EVENT CAKES':
+                    message = 'Hello Chef Briget, I am interested in ordering *EVENT CAKES* for an event. Please share your menu and prices. Thank you!';
+                    break;
+                case 'BIRTHDAY CAKES':
+                    message = 'Hello Chef Briget, I am interested in ordering a *BIRTHDAY CAKE*. Please share your menu and prices. Thank you!';
+                    break;
+                default:
+                    message = 'Hello Chef Briget, I would love to order some delicious treats from Pure Golden Bliss! Please share your menu and prices. Thank you!';
+                    break;
+            }
+            window.open(getWhatsAppUrl(message), '_blank');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const floatBtn = document.getElementById('floatWaBtn');
+            if (floatBtn) {
+                floatBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    whatsappInquiry('general');
+                });
+            }
+        });
+
+        window.whatsappInquiry = whatsappInquiry;
+    </script>
+
+</body>
+</html>
