@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://shiimaina.github.io/Bridgets-Bakery/sitemap.xml
