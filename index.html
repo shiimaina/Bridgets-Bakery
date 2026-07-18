@@ -291,7 +291,7 @@
         }
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 32px;
             margin: 40px 0 20px;
         }
@@ -299,7 +299,7 @@
             background: var(--black-card);
             border: 1px solid rgba(212, 175, 55, 0.15);
             border-radius: 32px 16px 32px 16px;
-            padding: 32px 20px 28px;
+            padding: 20px 20px 28px;
             text-align: center;
             transition: all 0.4s ease;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
@@ -309,39 +309,24 @@
             position: relative;
             overflow: hidden;
         }
-        .product-card::before {
-            content: '\f1c0';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            font-size: 6rem;
-            color: rgba(212, 175, 55, 0.03);
-            position: absolute;
-            bottom: -20px;
-            right: -20px;
-            transform: rotate(10deg);
-            pointer-events: none;
-        }
         .product-card:hover {
             border-color: var(--gold);
             transform: translateY(-8px) scale(1.01);
             box-shadow: var(--shadow-gold), var(--shadow-dark);
         }
-        .product-icon {
-            font-size: 3.2rem;
-            color: var(--gold);
+        /* Product image styling */
+        .product-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 20px 8px 20px 8px;
             margin-bottom: 16px;
-            background: rgba(212, 175, 55, 0.08);
-            width: 80px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            transition: 0.3s;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            transition: transform 0.4s ease, border-color 0.3s ease;
+            background: var(--black-soft);
         }
-        .product-card:hover .product-icon {
-            background: rgba(212, 175, 55, 0.18);
+        .product-card:hover .product-image {
+            transform: scale(1.02);
             border-color: var(--gold);
             box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
         }
@@ -351,6 +336,7 @@
             font-weight: 600;
             color: #fff;
             margin-bottom: 8px;
+            margin-top: 4px;
         }
         .product-card p {
             color: #b3a48b;
@@ -546,13 +532,17 @@
             .hero-description { margin-left: auto; margin-right: auto; }
             .footer-buttons { justify-content: center; }
             .hero::before, .hero::after { font-size: 3rem; opacity: 0.3; letter-spacing: 30px; }
+            .product-image { height: 180px; }
+            .products-grid { grid-template-columns: 1fr 1fr; }
         }
         @media (max-width: 480px) {
             .hero-content h1 { font-size: 2rem; }
             .container { padding: 0 16px; }
-            .product-card { padding: 24px 14px; }
+            .product-card { padding: 16px 14px 20px; }
             .nav-links { gap: 14px; }
             .nav-links a { font-size: 0.8rem; letter-spacing: 1px; }
+            .products-grid { grid-template-columns: 1fr; }
+            .product-image { height: 200px; }
         }
     </style>
 </head>
@@ -598,7 +588,7 @@
         </div>
     </div>
 
-    <!-- ========== PRODUCTS ========== -->
+    <!-- ========== PRODUCTS with IMAGES ========== -->
     <div class="container" id="products">
         <div style="margin-top: 60px;">
             <h2 class="section-title">Our <span>Golden</span> Collection</h2>
@@ -606,35 +596,39 @@
             <p class="section-sub">Handcrafted with love — Click below to inquire on WhatsApp</p>
         </div>
         <div class="products-grid">
+            <!-- 1. BIRTHDAY CAKES -->
             <div class="product-card">
-                <div class="product-icon"><i class="fas fa-cupcake"></i></div>
+                <img src="https://i.ibb.co/TBLGKqZm/birthday.jpg" alt="Birthday Cake" class="product-image" loading="lazy" />
+                <h3>Birthday Cakes</h3>
+                <p>Custom-designed birthday cakes, made to make your celebration unforgettable.</p>
+                <button class="btn-wa" onclick="whatsappInquiry('BIRTHDAY CAKES')">
+                    <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
+                </button>
+            </div>
+            <!-- 2. CUPCAKES -->
+            <div class="product-card">
+                <img src="https://i.ibb.co/BV6v3CvQ/cupcake.jpg" alt="Cupcakes" class="product-image" loading="lazy" />
                 <h3>Cupcakes</h3>
                 <p>Fluffy, moist, and topped with golden buttercream. Pure bliss in every bite.</p>
                 <button class="btn-wa" onclick="whatsappInquiry('CUPCAKES')">
                     <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
                 </button>
             </div>
+            <!-- 3. COOKIES -->
             <div class="product-card">
-                <div class="product-icon"><i class="fas fa-cookie-bite"></i></div>
+                <img src="https://i.ibb.co/60hPfQxG/cookies.jpg" alt="Cookies" class="product-image" loading="lazy" />
                 <h3>Cookies</h3>
                 <p>Chewy, rich, and packed with premium chocolate chips. A classic golden treat.</p>
                 <button class="btn-wa" onclick="whatsappInquiry('COOKIES')">
                     <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
                 </button>
             </div>
+            <!-- 4. EVENT CAKES -->
             <div class="product-card">
-                <div class="product-icon"><i class="fas fa-champagne-glasses"></i></div>
+                <img src="https://i.ibb.co/Z6JwKgwp/eventcake.jpg" alt="Event Cake" class="product-image" loading="lazy" />
                 <h3>Event Cakes</h3>
                 <p>Grand, elegant cakes tailored for weddings, parties, and corporate events.</p>
                 <button class="btn-wa" onclick="whatsappInquiry('EVENT CAKES')">
-                    <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
-                </button>
-            </div>
-            <div class="product-card">
-                <div class="product-icon"><i class="fas fa-birthday-cake"></i></div>
-                <h3>Birthday Cakes</h3>
-                <p>Custom-designed birthday cakes, made to make your celebration unforgettable.</p>
-                <button class="btn-wa" onclick="whatsappInquiry('BIRTHDAY CAKES')">
                     <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
                 </button>
             </div>
@@ -679,12 +673,10 @@
                     <h4>Pure Golden Bliss</h4>
                     <p>Artisan Bakery by Chef Briget</p>
                     <p><i class="fas fa-map-pin" style="color: var(--gold);"></i> Nairobi, Kenya</p>
-                    <!-- Phone number is now a clickable tel: link -->
                     <p>
                         <i class="fas fa-phone-alt" style="color: var(--gold);"></i>
                         <a href="tel:+254790499261" style="color: #a6977d; text-decoration: none;">+254 790 499261</a>
                     </p>
-                    <!-- Email is already a mailto: link -->
                     <p>
                         <i class="fas fa-envelope" style="color: var(--gold);"></i>
                         <a href="mailto:shiimaina106@gmail.com">shiimaina106@gmail.com</a>
