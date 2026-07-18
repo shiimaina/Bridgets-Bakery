@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- ========== META TAGS (SEO) ========== -->
+    <!-- ========== META TAGS ========== -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bridget's Bakery | Artisan Cakes & Cupcakes in Nairobi</title>
     <meta name="description" content="Order artisan cakes, cupcakes, and cookies from Chef Briget in Nairobi. Made with passion and finest ingredients. Custom orders available." />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://shiimaina.github.io/Bridgets-Bakery/" />
+
+    <!-- ========== GOOGLE SITE VERIFICATION ========== -->
+    <meta name="google-site-verification" content="google1ed78932edb61fb6" />
 
     <!-- ========== FAVICON (gold 'B' – not emoji) ========== -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='85' font-weight='bold' font-family='Georgia,serif' fill='%23D4AF37' text-anchor='middle' x='50%' y='75%'>B</text></svg>" />
@@ -39,7 +42,7 @@
     }
     </script>
 
-    <!-- ========== SITEMAP LINK ========== -->
+    <!-- ========== SITEMAP & ROBOTS ========== -->
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
 
     <!-- Google Fonts & Font Awesome -->
@@ -49,7 +52,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
     <style>
-        /* ===== GOLD & BLACK THEME — same as before ===== */
+        /* ===== GOLD & BLACK THEME ===== */
         * {
             margin: 0;
             padding: 0;
@@ -459,6 +462,10 @@
         .footer-col a:hover {
             color: var(--gold);
         }
+        .footer-col a[href^="tel:"]:hover,
+        .footer-col a[href^="mailto:"]:hover {
+            color: var(--gold);
+        }
         .footer-social {
             display: flex;
             gap: 20px;
@@ -672,7 +679,12 @@
                     <h4>Pure Golden Bliss</h4>
                     <p>Artisan Bakery by Chef Briget</p>
                     <p><i class="fas fa-map-pin" style="color: var(--gold);"></i> Nairobi, Kenya</p>
-                    <p><i class="fas fa-phone-alt" style="color: var(--gold);"></i> +254 790 499261</p>
+                    <!-- Phone number is now a clickable tel: link -->
+                    <p>
+                        <i class="fas fa-phone-alt" style="color: var(--gold);"></i>
+                        <a href="tel:+254790499261" style="color: #a6977d; text-decoration: none;">+254 790 499261</a>
+                    </p>
+                    <!-- Email is already a mailto: link -->
                     <p>
                         <i class="fas fa-envelope" style="color: var(--gold);"></i>
                         <a href="mailto:shiimaina106@gmail.com">shiimaina106@gmail.com</a>
@@ -751,5 +763,6 @@
         });
         window.whatsappInquiry = whatsappInquiry;
     </script>
+
 </body>
 </html>
