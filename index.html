@@ -1,29 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- ========== META TAGS ========== -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bridget's Bakery | Artisan Cakes & Cupcakes in Nairobi</title>
-    <meta name="description" content="Order artisan cakes, cupcakes, and cookies from Chef Briget in Nairobi. Made with passion and finest ingredients. Custom orders available." />
-    <meta name="robots" content="index, follow" />
+    <meta name="description" content="Order artisan cakes, cupcakes, and cookies from Chef Briget in Nairobi." />
     <link rel="canonical" href="https://shiimaina.github.io/Bridgets-Bakery/" />
-
-    <!-- ========== GOOGLE SITE VERIFICATION ========== -->
     <meta name="google-site-verification" content="google1ed78932edb61fb6" />
-
-    <!-- ========== FAVICON (Cake Emoji) ========== -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧁</text></svg>" />
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧁</text></svg>" />
 
-    <!-- ========== OPEN GRAPH ========== -->
+    <!-- Open Graph -->
     <meta property="og:title" content="Bridget's Bakery | Artisan Cakes &amp; Cupcakes in Nairobi" />
-    <meta property="og:description" content="Order artisan cakes, cupcakes, and cookies from Chef Briget. Custom orders available." />
+    <meta property="og:description" content="Order artisan cakes, cupcakes, and cookies from Chef Briget." />
     <meta property="og:url" content="https://shiimaina.github.io/Bridgets-Bakery/" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://i.ibb.co/N8mfhBP/bridgets-log.png" />
 
-    <!-- ========== STRUCTURED DATA ========== -->
+    <!-- Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -42,7 +36,7 @@
     }
     </script>
 
-    <!-- ========== SITEMAP & ROBOTS ========== -->
+    <!-- Sitemap & Robots -->
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
 
     <!-- Google Fonts & Font Awesome -->
@@ -51,12 +45,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
-    <!-- ========== FIREBASE SDK ========== -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js" defer></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js" defer></script>
 
     <style>
-        /* ===== GOLD & BLACK THEME ===== */
+        /* ---------- RESET & VARIABLES ---------- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --gold: #D4AF37;
@@ -68,7 +62,6 @@
             --shadow-gold: 0 8px 40px rgba(212, 175, 55, 0.2);
             --shadow-dark: 0 12px 50px rgba(0, 0, 0, 0.8);
             --whatsapp-green: #25D366;
-            --call-gold: #D4AF37;
             --ease: cubic-bezier(0.16, 1, 0.3, 1);
         }
         body {
@@ -78,7 +71,6 @@
             line-height: 1.6;
             scroll-behavior: smooth;
             overflow-x: hidden;
-            position: relative;
         }
         body::before {
             content: '';
@@ -90,12 +82,10 @@
             mix-blend-mode: overlay;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
-        a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
         ::selection { background: rgba(212, 175, 55, 0.35); color: #fff; }
-        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; } }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
 
-        /* TOP BAR */
+        /* ---------- TOP BAR ---------- */
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -109,16 +99,76 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            transition: background 0.4s var(--ease), border-color 0.4s var(--ease), padding 0.3s var(--ease), backdrop-filter 0.4s var(--ease);
+            transition: background 0.4s var(--ease), backdrop-filter 0.4s var(--ease), padding 0.3s var(--ease);
         }
         .top-bar.scrolled {
             background: rgba(11, 11, 11, 0.88);
             backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
             border-color: rgba(212, 175, 55, 0.22);
             padding: 12px 24px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
         }
+
+        .brand {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.15;
+        }
+        .brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
+        }
+        .brand-name span { color: var(--gold); text-shadow: 0 0 40px rgba(212, 175, 55, 0.3); }
+        .brand-tagline {
+            font-size: 0.65rem;
+            letter-spacing: 6px;
+            color: var(--gold);
+            font-weight: 300;
+            margin-top: 2px;
+            opacity: 0.8;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #d4c9b5;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: 0.25s;
+            letter-spacing: 1.5px;
+            position: relative;
+            padding: 4px 2px;
+            cursor: pointer;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--gold);
+        }
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
         .nav-toggle {
             display: none;
             flex-direction: column;
@@ -143,491 +193,89 @@
         .nav-toggle.open span:nth-child(2) { opacity: 0; }
         .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-        .brand {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.15;
-        }
-        .brand-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: 2px;
-            text-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
-        }
-        .brand-name span { color: var(--gold); text-shadow: 0 0 40px rgba(212, 175, 55, 0.3); }
-        .brand-tagline {
-            font-size: 0.65rem;
-            letter-spacing: 6px;
-            color: var(--gold);
-            font-weight: 300;
-            margin-top: 2px;
-            opacity: 0.8;
-        }
-        .nav-links {
-            display: flex;
-            gap: 32px;
-            list-style: none;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .nav-links a {
-            text-decoration: none;
-            color: #d4c9b5;
-            font-weight: 400;
-            font-size: 0.9rem;
-            transition: 0.25s;
-            letter-spacing: 2px;
-            position: relative;
-            cursor: pointer;
-        }
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--gold);
-            transition: width 0.3s ease;
-        }
-        .nav-links a:hover, .nav-links a.active { color: var(--gold); }
-        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
-
-        /* HERO */
-        .hero {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            padding: 40px 0 60px;
-            gap: 40px;
-            position: relative;
-            min-height: 70vh;
-        }
-        .hero::before {
-            content: '\f1c0  \f1c0  \f1c0  \f1c0';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            font-size: 6rem;
-            color: rgba(212, 175, 55, 0.04);
-            position: absolute;
-            top: -20%;
-            right: -10%;
-            white-space: nowrap;
-            pointer-events: none;
-            transform: rotate(-12deg);
-            letter-spacing: 80px;
-            z-index: 0;
-        }
-        .hero::after {
-            content: '\f1c0  \f1c0  \f1c0';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            font-size: 4.5rem;
-            color: rgba(212, 175, 55, 0.03);
-            position: absolute;
-            bottom: 10%;
-            left: -8%;
-            white-space: nowrap;
-            pointer-events: none;
-            transform: rotate(8deg);
-            letter-spacing: 60px;
-            z-index: 0;
-        }
-        .hero-content {
-            flex: 1.2;
-            min-width: 280px;
-            position: relative;
-            z-index: 1;
-        }
-        .hero-badge {
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 6px;
-            color: var(--gold);
-            text-transform: uppercase;
-            margin-bottom: 16px;
-            opacity: 0.8;
-        }
-        .hero-content h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 4.4rem;
-            line-height: 1.05;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 12px;
-            text-shadow: 0 4px 40px rgba(0, 0, 0, 0.6);
-        }
+        /* ---------- HERO ---------- */
+        .hero { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 40px 0 60px; gap: 40px; position: relative; min-height: 70vh; }
+        .hero::before { content: '\f1c0  \f1c0  \f1c0  \f1c0'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 6rem; color: rgba(212, 175, 55, 0.04); position: absolute; top: -20%; right: -10%; white-space: nowrap; pointer-events: none; transform: rotate(-12deg); letter-spacing: 80px; z-index: 0; }
+        .hero::after { content: '\f1c0  \f1c0  \f1c0'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 4.5rem; color: rgba(212, 175, 55, 0.03); position: absolute; bottom: 10%; left: -8%; white-space: nowrap; pointer-events: none; transform: rotate(8deg); letter-spacing: 60px; z-index: 0; }
+        .hero-content { flex: 1.2; min-width: 280px; position: relative; z-index: 1; }
+        .hero-badge { font-size: 0.75rem; font-weight: 600; letter-spacing: 6px; color: var(--gold); text-transform: uppercase; margin-bottom: 16px; opacity: 0.8; }
+        .hero-content h1 { font-family: 'Playfair Display', serif; font-size: 4.4rem; line-height: 1.05; font-weight: 700; color: #fff; margin-bottom: 12px; text-shadow: 0 4px 40px rgba(0, 0, 0, 0.6); }
         .hero-gold { color: var(--gold); font-style: italic; text-shadow: 0 0 50px rgba(212, 175, 55, 0.2); }
-        .hero-description {
-            font-size: 1.1rem;
-            color: #b5aa95;
-            max-width: 500px;
-            margin: 20px 0 32px;
-            font-weight: 300;
-            letter-spacing: 0.5px;
-        }
-        .hero-image {
-            flex: 1;
-            min-width: 220px;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-            background: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.06), transparent 70%);
-            padding: 20px 10px;
-            border-radius: 60px 20px 60px 20px;
-            border: 1px solid rgba(212, 175, 55, 0.10);
-            box-shadow: var(--shadow-gold);
-            backdrop-filter: blur(2px);
-        }
-        .hero-image img {
-            max-width: 85%;
-            height: auto;
-            filter: drop-shadow(0 8px 40px rgba(212, 175, 55, 0.25));
-            transition: transform 0.5s ease;
-        }
+        .hero-description { font-size: 1.1rem; color: #b5aa95; max-width: 500px; margin: 20px 0 32px; font-weight: 300; letter-spacing: 0.5px; }
+        .hero-image { flex: 1; min-width: 220px; text-align: center; position: relative; z-index: 1; background: radial-gradient(circle at 50% 30%, rgba(212, 175, 55, 0.06), transparent 70%); padding: 20px 10px; border-radius: 60px 20px 60px 20px; border: 1px solid rgba(212, 175, 55, 0.10); box-shadow: var(--shadow-gold); backdrop-filter: blur(2px); }
+        .hero-image img { max-width: 85%; height: auto; filter: drop-shadow(0 8px 40px rgba(212, 175, 55, 0.25)); transition: transform 0.5s ease; }
         .hero-image img:hover { transform: scale(1.02); }
-        .hero-chef-tag {
-            margin-top: 12px;
-            color: var(--gold);
-            font-family: 'Playfair Display', serif;
-            font-size: 1rem;
-            letter-spacing: 3px;
-            opacity: 0.7;
-        }
-        .cake-bg-icon {
-            position: absolute;
-            font-size: 3rem;
-            color: rgba(212, 175, 55, 0.05);
-            pointer-events: none;
-        }
+        .hero-chef-tag { margin-top: 12px; color: var(--gold); font-family: 'Playfair Display', serif; font-size: 1rem; letter-spacing: 3px; opacity: 0.7; }
+        .cake-bg-icon { position: absolute; font-size: 3rem; color: rgba(212, 175, 55, 0.05); pointer-events: none; }
         @keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .hero-image { animation: floatY 6s ease-in-out infinite; }
-        .hero-badge, .hero-content h1, .hero-description, .hero-content > div {
-            opacity: 0;
-            transform: translateY(16px);
-            animation: heroIn 0.7s var(--ease) forwards;
-        }
-        .hero-badge { animation-delay: 0.05s; }
-        .hero-content h1 { animation-delay: 0.15s; }
-        .hero-description { animation-delay: 0.28s; }
-        .hero-content > div { animation-delay: 0.4s; }
-        @keyframes heroIn { to { opacity: 1; transform: translateY(0); } }
-
-        /* SECTIONS – hide/show */
-        .page-section {
-            display: block;
-            transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
-        }
-        .page-section.hidden {
-            display: none;
-        }
-        .hidden { display: none !important; }
 
         /* REVEAL */
-        .reveal {
-            opacity: 0;
-            transform: translateY(28px);
-            transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
-        }
+        .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
         .reveal.in-view { opacity: 1; transform: translateY(0); }
-        .reveal-stagger .product-card,
-        .reveal-stagger .footer-col {
-            opacity: 0;
-            transform: translateY(28px);
-            transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
-        }
-        .reveal-stagger.in-view .product-card,
-        .reveal-stagger.in-view .footer-col {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .reveal-stagger .product-card, .reveal-stagger .footer-col { opacity: 0; transform: translateY(28px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+        .reveal-stagger.in-view .product-card, .reveal-stagger.in-view .footer-col { opacity: 1; transform: translateY(0); }
         .reveal-stagger.in-view .product-card:nth-child(1) { transition-delay: 0.05s; }
         .reveal-stagger.in-view .product-card:nth-child(2) { transition-delay: 0.15s; }
         .reveal-stagger.in-view .product-card:nth-child(3) { transition-delay: 0.25s; }
         .reveal-stagger.in-view .product-card:nth-child(4) { transition-delay: 0.35s; }
 
-        /* TITLES */
-        .section-title {
-            text-align: center;
-            font-family: 'Playfair Display', serif;
-            font-size: 2.8rem;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 8px;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
-        }
+        /* SECTION TITLES */
+        .section-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 600; color: #fff; margin-bottom: 8px; text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5); }
         .section-title span { color: var(--gold); text-shadow: 0 0 30px rgba(212, 175, 55, 0.15); }
-        .section-sub {
-            text-align: center;
-            color: #a0927a;
-            margin-bottom: 48px;
-            letter-spacing: 3px;
-            font-weight: 300;
-        }
-        .gold-divider {
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            margin: 10px auto 30px;
-        }
+        .section-sub { text-align: center; color: #a0927a; margin-bottom: 48px; letter-spacing: 3px; font-weight: 300; }
+        .gold-divider { width: 80px; height: 3px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 10px auto 30px; }
 
         /* PRODUCTS */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 32px;
-            margin: 40px 0 20px;
-        }
-        .product-card {
-            background: var(--black-card);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-radius: 32px 16px 32px 16px;
-            padding: 20px 20px 28px;
-            text-align: center;
-            transition: all 0.4s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .product-card:hover {
-            border-color: var(--gold);
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: var(--shadow-gold), var(--shadow-dark);
-        }
-        .product-image-wrap {
-            position: relative;
-            width: 100%;
-            border-radius: 20px 8px 20px 8px;
-            overflow: hidden;
-            margin-bottom: 16px;
-        }
-        .product-image {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 20px 8px 20px 8px;
-            display: block;
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            transition: transform 0.5s var(--ease), border-color 0.3s ease;
-            background: var(--black-soft);
-        }
-        .product-image-wrap::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, transparent 50%, rgba(11, 11, 11, 0.75) 100%);
-            opacity: 0;
-            transition: opacity 0.35s ease;
-        }
-        .product-card:hover .product-image {
-            transform: scale(1.06);
-            border-color: var(--gold);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
-        }
-        .product-card:hover .product-image-wrap::after { opacity: 1; }
-        .product-card h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.6rem;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 8px;
-            margin-top: 4px;
-        }
-        .product-card p {
-            color: #b3a48b;
-            font-size: 0.95rem;
-            margin-bottom: 20px;
-            flex-grow: 1;
-        }
-        .btn-wa {
-            background: transparent;
-            border: 2px solid var(--gold);
-            color: var(--gold);
-            padding: 10px 24px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Montserrat', sans-serif;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-            justify-content: center;
-            margin-top: 8px;
-            letter-spacing: 1px;
-        }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; margin: 40px 0 20px; }
+        .product-card { background: var(--black-card); border: 1px solid rgba(212, 175, 55, 0.15); border-radius: 32px 16px 32px 16px; padding: 20px 20px 28px; text-align: center; transition: all 0.4s ease; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6); display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden; }
+        .product-card:hover { border-color: var(--gold); transform: translateY(-8px) scale(1.01); box-shadow: var(--shadow-gold), var(--shadow-dark); }
+        .product-image-wrap { position: relative; width: 100%; border-radius: 20px 8px 20px 8px; overflow: hidden; margin-bottom: 16px; }
+        .product-image { width: 100%; height: 220px; object-fit: cover; border-radius: 20px 8px 20px 8px; display: block; border: 1px solid rgba(212, 175, 55, 0.15); transition: transform 0.5s var(--ease), border-color 0.3s ease; background: var(--black-soft); }
+        .product-card:hover .product-image { transform: scale(1.06); border-color: var(--gold); }
+        .product-card h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 600; color: #fff; margin-bottom: 8px; margin-top: 4px; }
+        .product-card p { color: #b3a48b; font-size: 0.95rem; margin-bottom: 20px; flex-grow: 1; }
+        .btn-wa { background: transparent; border: 2px solid var(--gold); color: var(--gold); padding: 10px 24px; border-radius: 40px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.3s ease; font-family: 'Montserrat', sans-serif; display: inline-flex; align-items: center; gap: 10px; width: 100%; justify-content: center; margin-top: 8px; letter-spacing: 1px; }
         .btn-wa i { font-size: 1.2rem; }
-        .btn-wa:hover {
-            background: var(--gold);
-            color: var(--black);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
-            transform: scale(1.02);
-        }
+        .btn-wa:hover { background: var(--gold); color: var(--black); box-shadow: 0 0 30px rgba(212, 175, 55, 0.3); transform: scale(1.02); }
 
-        /* FLOATING BUTTONS */
-        .float-buttons {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            z-index: 999;
-        }
-        .float-btn {
-            width: 58px;
-            height: 58px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: #fff;
-            text-decoration: none;
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(6px);
-        }
-        .float-btn:hover { transform: scale(1.08) translateY(-3px); }
-        .float-top {
-            background: rgba(26, 26, 26, 0.9);
-            border-color: rgba(212, 175, 55, 0.3);
-            color: var(--gold);
-            font-size: 1.3rem;
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(8px);
-            transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s ease;
-        }
-        .float-top.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
-        .float-top:hover { background: var(--gold); color: var(--black); }
-        .float-wa {
-            background: rgba(37, 211, 102, 0.9);
-            border-color: var(--gold);
-            box-shadow: 0 4px 30px rgba(37, 211, 102, 0.25), 0 0 20px rgba(212, 175, 55, 0.1);
-        }
-        .float-wa:hover { background: #20b85a; box-shadow: 0 4px 40px rgba(37, 211, 102, 0.4), 0 0 30px rgba(212, 175, 55, 0.2); }
-        .float-call {
-            background: rgba(212, 175, 55, 0.85);
-            border-color: var(--gold);
-            box-shadow: 0 4px 30px rgba(212, 175, 55, 0.2), 0 0 20px rgba(212, 175, 55, 0.05);
-            color: #0B0B0B;
-        }
-        .float-call:hover { background: var(--gold); box-shadow: 0 4px 40px rgba(212, 175, 55, 0.4); color: #000; }
-
-        /* GALLERY GRID – now supports captions */
-        .gallery-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            justify-content: center;
-            padding: 20px 0 40px;
-        }
-        .gallery-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 240px;
-            width: 100%;
-        }
-        .gallery-item img {
-            width: 100%;
-            height: 240px;
-            object-fit: cover;
-            border-radius: 16px;
-            border: 2px solid #D4AF37;
-            transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
-            background: #111;
-        }
-        .gallery-item img:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3);
-        }
-        .gallery-caption {
-            color: #b5aa95;
-            font-size: 0.9rem;
-            margin-top: 8px;
-            text-align: center;
-            max-width: 240px;
-            line-height: 1.4;
-        }
-        .gallery-empty {
-            color: #a6977d;
-            text-align: center;
-            width: 100%;
-            font-size: 1.1rem;
-            padding: 40px 0;
-        }
-        .product-image, .gallery-item img { cursor: zoom-in; }
-
-        /* SKELETON SHIMMER */
-        .skeleton-card {
-            width: 240px;
-            height: 240px;
-            border-radius: 16px;
-            background: linear-gradient(100deg, #151515 30%, #1f1a0e 50%, #151515 70%);
-            background-size: 200% 100%;
-            animation: shimmer 1.4s ease-in-out infinite;
-            border: 1px solid rgba(212, 175, 55, 0.15);
-        }
+        /* ---------- GALLERY PAGE ---------- */
+        .gallery-page { display: none; padding: 40px 0 60px; }
+        .gallery-page.active { display: block; }
+        .gallery-grid { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; padding: 20px 0 40px; }
+        .gallery-item { display: flex; flex-direction: column; align-items: center; max-width: 240px; width: 100%; }
+        .gallery-item img { width: 100%; height: 240px; object-fit: cover; border-radius: 16px; border: 2px solid #D4AF37; transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease); background: #111; cursor: zoom-in; }
+        .gallery-item img:hover { transform: scale(1.05); box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3); }
+        .gallery-caption { color: #b5aa95; font-size: 0.9rem; margin-top: 8px; text-align: center; max-width: 240px; line-height: 1.4; }
+        .gallery-empty { color: #a6977d; text-align: center; width: 100%; font-size: 1.1rem; padding: 40px 0; }
+        .skeleton-card { width: 240px; height: 240px; border-radius: 16px; background: linear-gradient(100deg, #151515 30%, #1f1a0e 50%, #151515 70%); background-size: 200% 100%; animation: shimmer 1.4s ease-in-out infinite; border: 1px solid rgba(212, 175, 55, 0.15); }
         @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-        @media (max-width: 480px) { .skeleton-card { width: 160px; height: 160px; } }
 
-        /* LIGHTBOX */
-        .lightbox-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(5, 5, 5, 0.92);
-            backdrop-filter: blur(6px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.25s ease;
-            padding: 24px;
-        }
+        /* ---------- LIGHTBOX ---------- */
+        .lightbox-overlay { position: fixed; inset: 0; background: rgba(5, 5, 5, 0.92); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; padding: 24px; }
         .lightbox-overlay.open { opacity: 1; pointer-events: auto; }
-        .lightbox-overlay img {
-            max-width: min(90vw, 700px);
-            max-height: 85vh;
-            border-radius: 16px;
-            border: 2px solid var(--gold);
-            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
-            transform: scale(0.96);
-            transition: transform 0.25s ease;
-        }
+        .lightbox-overlay img { max-width: min(90vw, 700px); max-height: 85vh; border-radius: 16px; border: 2px solid var(--gold); box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8); transform: scale(0.96); transition: transform 0.25s ease; }
         .lightbox-overlay.open img { transform: scale(1); }
-        .lightbox-close {
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(26, 26, 26, 0.9);
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            color: var(--gold);
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+        .lightbox-close { position: absolute; top: 24px; right: 24px; width: 44px; height: 44px; border-radius: 50%; background: rgba(26, 26, 26, 0.9); border: 1px solid rgba(212, 175, 55, 0.4); color: var(--gold); font-size: 1.3rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
         .lightbox-close:hover { background: var(--gold); color: #0B0B0B; }
 
-        /* FOOTER */
+        /* ---------- MAIN CONTENT ---------- */
+        .main-content { display: block; }
+        .main-content.hidden { display: none; }
+
+        /* ---------- FLOATING BUTTONS ---------- */
+        .float-buttons { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 14px; z-index: 999; }
+        .float-btn { width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #fff; text-decoration: none; border: 2px solid rgba(255, 255, 255, 0.15); transition: all 0.3s ease; box-shadow: 0 4px 25px rgba(0, 0, 0, 0.6); backdrop-filter: blur(6px); }
+        .float-btn:hover { transform: scale(1.08) translateY(-3px); }
+        .float-top { background: rgba(26, 26, 26, 0.9); border-color: rgba(212, 175, 55, 0.3); color: var(--gold); font-size: 1.3rem; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity 0.3s ease, transform 0.3s ease; }
+        .float-top.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+        .float-top:hover { background: var(--gold); color: var(--black); }
+        .float-wa { background: rgba(37, 211, 102, 0.9); border-color: var(--gold); box-shadow: 0 4px 30px rgba(37, 211, 102, 0.25); }
+        .float-wa:hover { background: #20b85a; }
+        .float-call { background: rgba(212, 175, 55, 0.85); border-color: var(--gold); color: #0B0B0B; }
+        .float-call:hover { background: var(--gold); color: #000; }
+
+        /* ---------- FOOTER ---------- */
         footer {
             margin-top: 80px;
             border-top: 1px solid rgba(212, 175, 55, 0.12);
@@ -654,11 +302,13 @@
             transition: 0.2s;
         }
         .footer-col a:hover { color: var(--gold); }
+
         .footer-social {
             display: flex;
             gap: 20px;
             align-items: center;
             flex-wrap: wrap;
+            margin-top: 8px;
         }
         .footer-social a {
             font-size: 1.6rem;
@@ -667,29 +317,42 @@
             display: inline-block;
         }
         .footer-social a:hover { color: var(--gold); transform: scale(1.1); }
+
         .footer-buttons {
             display: flex;
             gap: 14px;
             flex-wrap: wrap;
-            margin-top: 8px;
+            margin-top: 12px;
         }
         .footer-btn {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 8px 22px;
+            padding: 10px 24px;
             border-radius: 40px;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             text-decoration: none;
             transition: 0.3s;
             border: 2px solid transparent;
             letter-spacing: 0.5px;
+            cursor: pointer;
         }
         .footer-btn-wa { background: var(--whatsapp-green); color: #fff; border-color: var(--whatsapp-green); }
-        .footer-btn-wa:hover { background: transparent; color: var(--whatsapp-green); box-shadow: 0 0 20px rgba(37, 211, 102, 0.15); }
+        .footer-btn-wa:hover { background: transparent; color: var(--whatsapp-green); }
         .footer-btn-call { background: var(--gold); color: #0B0B0B; border-color: var(--gold); }
-        .footer-btn-call:hover { background: transparent; color: var(--gold); box-shadow: 0 0 20px rgba(212, 175, 55, 0.15); }
+        .footer-btn-call:hover { background: transparent; color: var(--gold); }
+        .footer-btn-gallery {
+            background: transparent;
+            color: var(--gold);
+            border-color: var(--gold);
+            margin-right: 8px;
+        }
+        .footer-btn-gallery:hover {
+            background: var(--gold);
+            color: var(--black);
+        }
+
         .copyright {
             text-align: center;
             margin-top: 48px;
@@ -699,7 +362,7 @@
         }
         .copyright span { color: var(--gold); }
 
-        /* RESPONSIVE */
+        /* ---------- RESPONSIVE ---------- */
         @media (max-width: 768px) {
             .hero-content h1 { font-size: 2.6rem; }
             .top-bar { justify-content: space-between; align-items: center; }
@@ -726,12 +389,10 @@
             .brand-tagline { text-align: center; }
             .footer-grid { flex-direction: column; align-items: center; text-align: center; }
             .footer-social { justify-content: center; }
-            .hero { flex-direction: column-reverse; text-align: center; padding: 20px 0 40px; min-height: auto; }
-            .hero-description { margin-left: auto; margin-right: auto; }
             .footer-buttons { justify-content: center; }
-            .hero::before, .hero::after { font-size: 3rem; opacity: 0.3; letter-spacing: 30px; }
+            .hero { flex-direction: column-reverse; text-align: center; padding: 20px 0 40px; min-height: auto; }
             .products-grid { grid-template-columns: 1fr 1fr; }
-            .product-image { height: 180px; object-fit: cover; }
+            .product-image { height: 180px; }
             .gallery-item img { height: 200px; }
         }
         @media (max-width: 480px) {
@@ -739,8 +400,9 @@
             .container { padding: 0 16px; }
             .product-card { padding: 16px 14px 20px; }
             .products-grid { grid-template-columns: 1fr; }
-            .product-image { height: auto; aspect-ratio: 4/3; object-fit: contain; max-height: 280px; border-radius: 16px 6px 16px 6px; }
-            .gallery-item img { height: 160px; }
+            .product-image { height: auto; aspect-ratio: 4/3; object-fit: contain; max-height: 280px; }
+            .gallery-item img { height: 160px; max-width: 160px; }
+            .gallery-item { max-width: 160px; }
         }
     </style>
 </head>
@@ -757,99 +419,210 @@
                 <span></span><span></span><span></span>
             </button>
             <ul class="nav-links" id="navLinks">
-                <li><a href="#" data-section="home" class="active">Home</a></li>
-                <li><a href="#" data-section="products">Our Cakes</a></li>
-                <li><a href="#" data-section="gallery">Gallery</a></li>
-                <li><a href="#" data-section="about">About</a></li>
-                <li><a href="#" data-section="contact">Contact</a></li>
+                <li><a href="#" data-view="home" class="active">Home</a></li>
+                <li><a href="#" data-view="products">Our Cakes</a></li>
+                <li><a href="#" data-view="gallery">Gallery</a></li>
+                <li><a href="#" data-view="about">About</a></li>
+                <li><a href="#" data-view="contact">Contact</a></li>
             </ul>
         </div>
     </div>
 
-    <!-- ========== HERO (always visible) ========== -->
-    <div class="container">
-        <div class="hero">
-            <div class="hero-content">
-                <div class="hero-badge"><i class="fas fa-crown"></i> PURE · GOLDEN · BLISS</div>
-                <h1>Where every bite is <br /><span class="hero-gold">Golden Joy</span></h1>
-                <p class="hero-description">
-                    Artisanal baked goods crafted with passion and the finest ingredients.
-                    From our kitchen to yours — pure indulgence.
-                </p>
-                <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: inherit;">
-                    <a href="#" data-section="products" style="display: inline-flex; align-items: center; gap: 10px; background: transparent; color: var(--gold); padding: 14px 36px; border-radius: 40px; font-weight: 700; text-decoration: none; transition: 0.3s; border: 2px solid var(--gold); letter-spacing: 1.5px; box-shadow: 0 0 30px rgba(212, 175, 55, 0.05);">
-                        <i class="fas fa-cake-candles"></i> Explore treats
-                    </a>
-                    <a href="#" onclick="whatsappInquiry('general')" style="display: inline-flex; align-items: center; gap: 10px; background: var(--whatsapp-green); color: #fff; padding: 14px 32px; border-radius: 40px; font-weight: 700; text-decoration: none; transition: 0.3s; border: 2px solid var(--whatsapp-green); letter-spacing: 1px;" onmouseover="this.style.background='transparent';this.style.color='#25D366'" onmouseout="this.style.background='#25D366';this.style.color='#fff'">
-                        <i class="fab fa-whatsapp"></i> Order Now
-                    </a>
-                </div>
-            </div>
-            <div class="hero-image">
-                <img src="https://i.ibb.co/N8mfhBP/bridgets-log.png" alt="Pure Golden Bliss - Chef Briget Logo" />
-                <div class="hero-chef-tag">
-                    <i class="fas fa-star" style="color: var(--gold);"></i> Chef Briget <i class="fas fa-star" style="color: var(--gold);"></i>
-                </div>
-            </div>
-            <div class="cake-bg-icon" style="top: 10%; left: 5%; font-size: 4.5rem; opacity: 0.04;"><i class="fas fa-cake"></i></div>
-            <div class="cake-bg-icon" style="bottom: 15%; right: 8%; font-size: 3.8rem; opacity: 0.04;"><i class="fas fa-birthday-cake"></i></div>
-        </div>
-    </div>
+    <!-- ========== MAIN CONTENT (scrollable) ========== -->
+    <div class="main-content" id="mainContent">
 
-    <!-- ========== PAGE SECTIONS ========== -->
-    <!-- PRODUCTS (visible by default) -->
-    <div class="page-section" id="section-products">
-        <div class="container">
-            <div style="margin-top: 60px;" class="reveal">
-                <h2 class="section-title">Our <span>Golden</span> Collection</h2>
-                <div class="gold-divider"></div>
-                <p class="section-sub">Handcrafted with love — Click below to inquire on WhatsApp</p>
-            </div>
-            <div class="products-grid reveal-stagger">
-                <!-- 1. BIRTHDAY CAKES -->
-                <div class="product-card">
-                    <div class="product-image-wrap"><img src="https://i.ibb.co/TBLGKqZm/birthday.jpg" alt="Birthday Cake" class="product-image" loading="lazy" /></div>
-                    <h3>Birthday Cakes</h3>
-                    <p>Custom-designed birthday cakes, made to make your celebration unforgettable.</p>
-                    <button class="btn-wa" onclick="whatsappInquiry('BIRTHDAY CAKES')">
-                        <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
-                    </button>
-                </div>
-                <!-- 2. CUPCAKES -->
-                <div class="product-card">
-                    <div class="product-image-wrap"><img src="https://i.ibb.co/BV6v3CvQ/cupcake.jpg" alt="Cupcakes" class="product-image" loading="lazy" /></div>
-                    <h3>Cupcakes</h3>
-                    <p>Fluffy, moist, and topped with golden buttercream. Pure bliss in every bite.</p>
-                    <button class="btn-wa" onclick="whatsappInquiry('CUPCAKES')">
-                        <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
-                    </button>
-                </div>
-                <!-- 3. COOKIES -->
-                <div class="product-card">
-                    <div class="product-image-wrap"><img src="https://i.ibb.co/60hPfQxG/cookies.jpg" alt="Cookies" class="product-image" loading="lazy" /></div>
-                    <h3>Cookies</h3>
-                    <p>Chewy, rich, and packed with premium chocolate chips. A classic golden treat.</p>
-                    <button class="btn-wa" onclick="whatsappInquiry('COOKIES')">
-                        <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
-                    </button>
-                </div>
-                <!-- 4. EVENT CAKES -->
-                <div class="product-card">
-                    <div class="product-image-wrap"><img src="https://i.ibb.co/Z6JwKgwp/eventcake.jpg" alt="Event Cake" class="product-image" loading="lazy" /></div>
-                    <h3>Event Cakes</h3>
-                    <p>Grand, elegant cakes tailored for weddings, parties, and corporate events.</p>
-                    <button class="btn-wa" onclick="whatsappInquiry('EVENT CAKES')">
-                        <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
-                    </button>
+        <!-- HERO -->
+        <section id="home">
+            <div class="container">
+                <div class="hero">
+                    <div class="hero-content">
+                        <div class="hero-badge"><i class="fas fa-crown"></i> PURE · GOLDEN · BLISS</div>
+                        <h1>Where every bite is <br /><span class="hero-gold">Golden Joy</span></h1>
+                        <p class="hero-description">
+                            Artisanal baked goods crafted with passion and the finest ingredients.
+                            From our kitchen to yours — pure indulgence.
+                        </p>
+                        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                            <!-- REPLACED: Explore treats → View Gallery -->
+                            <a href="#" data-view="gallery" style="display: inline-flex; align-items: center; gap: 10px; background: transparent; color: var(--gold); padding: 14px 36px; border-radius: 40px; font-weight: 700; text-decoration: none; transition: 0.3s; border: 2px solid var(--gold); letter-spacing: 1.5px;">
+                                <i class="fas fa-images"></i> View Gallery
+                            </a>
+                            <a href="#" onclick="whatsappInquiry('general')" style="display: inline-flex; align-items: center; gap: 10px; background: var(--whatsapp-green); color: #fff; padding: 14px 32px; border-radius: 40px; font-weight: 700; text-decoration: none; transition: 0.3s; border: 2px solid var(--whatsapp-green); letter-spacing: 1px;" onmouseover="this.style.background='transparent';this.style.color='#25D366'" onmouseout="this.style.background='#25D366';this.style.color='#fff'">
+                                <i class="fab fa-whatsapp"></i> Order Now
+                            </a>
+                        </div>
+                    </div>
+                    <div class="hero-image">
+                        <img src="https://i.ibb.co/N8mfhBP/bridgets-log.png" alt="Pure Golden Bliss - Chef Briget Logo" />
+                        <div class="hero-chef-tag">
+                            <i class="fas fa-star" style="color: var(--gold);"></i> Chef Briget <i class="fas fa-star" style="color: var(--gold);"></i>
+                        </div>
+                    </div>
+                    <div class="cake-bg-icon" style="top: 10%; left: 5%; font-size: 4.5rem; opacity: 0.04;"><i class="fas fa-cake"></i></div>
+                    <div class="cake-bg-icon" style="bottom: 15%; right: 8%; font-size: 3.8rem; opacity: 0.04;"><i class="fas fa-birthday-cake"></i></div>
                 </div>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <!-- ========== GALLERY SECTION ========== -->
-    <div class="page-section hidden" id="section-gallery">
+        <!-- PRODUCTS -->
+        <section id="products">
+            <div class="container">
+                <div style="margin-top: 60px;" class="reveal">
+                    <h2 class="section-title">Our <span>Golden</span> Collection</h2>
+                    <div class="gold-divider"></div>
+                    <p class="section-sub">Handcrafted with love — Click below to inquire on WhatsApp</p>
+                </div>
+                <div class="products-grid reveal-stagger">
+                    <div class="product-card">
+                        <div class="product-image-wrap"><img src="https://i.ibb.co/TBLGKqZm/birthday.jpg" alt="Birthday Cake" class="product-image" loading="lazy" /></div>
+                        <h3>Birthday Cakes</h3>
+                        <p>Custom-designed birthday cakes, made to make your celebration unforgettable.</p>
+                        <button class="btn-wa" onclick="whatsappInquiry('BIRTHDAY CAKES')">
+                            <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
+                        </button>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image-wrap"><img src="https://i.ibb.co/BV6v3CvQ/cupcake.jpg" alt="Cupcakes" class="product-image" loading="lazy" /></div>
+                        <h3>Cupcakes</h3>
+                        <p>Fluffy, moist, and topped with golden buttercream. Pure bliss in every bite.</p>
+                        <button class="btn-wa" onclick="whatsappInquiry('CUPCAKES')">
+                            <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
+                        </button>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image-wrap"><img src="https://i.ibb.co/60hPfQxG/cookies.jpg" alt="Cookies" class="product-image" loading="lazy" /></div>
+                        <h3>Cookies</h3>
+                        <p>Chewy, rich, and packed with premium chocolate chips. A classic golden treat.</p>
+                        <button class="btn-wa" onclick="whatsappInquiry('COOKIES')">
+                            <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
+                        </button>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-image-wrap"><img src="https://i.ibb.co/Z6JwKgwp/eventcake.jpg" alt="Event Cake" class="product-image" loading="lazy" /></div>
+                        <h3>Event Cakes</h3>
+                        <p>Grand, elegant cakes tailored for weddings, parties, and corporate events.</p>
+                        <button class="btn-wa" onclick="whatsappInquiry('EVENT CAKES')">
+                            <i class="fab fa-whatsapp"></i> Inquire on WhatsApp
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about">
+            <div class="container">
+                <div class="reveal" style="margin: 70px 0; background: var(--black-soft); border-radius: 40px; padding: 48px 32px; border: 1px solid rgba(212, 175, 55, 0.10); box-shadow: var(--shadow-gold);">
+                    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 40px;">
+                        <div style="flex: 1;">
+                            <h3 style="font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold);">
+                                <i class="fas fa-utensils"></i> Chef Briget
+                            </h3>
+                            <p style="font-size: 1.1rem; color: #d4c9b5; margin: 16px 0;">
+                                <em>“Crafted with Passion, Served with Love.”</em>
+                            </p>
+                            <p style="color: #b5aa95;">
+                                With years of artisanal baking experience, Chef Briget brings together the finest ingredients
+                                to create golden, unforgettable treats. Every cake, cookie, and cupcake tells a story of warmth
+                                and dedication.
+                            </p>
+                            <div style="margin-top: 20px; display: flex; gap: 20px; flex-wrap: wrap;">
+                                <span style="background: rgba(212, 175, 55, 0.12); padding: 6px 18px; border-radius: 30px; color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.15);"><i class="fas fa-check"></i> Pure ingredients</span>
+                                <span style="background: rgba(212, 175, 55, 0.12); padding: 6px 18px; border-radius: 30px; color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.15);"><i class="fas fa-check"></i> Small batches</span>
+                                <span style="background: rgba(212, 175, 55, 0.12); padding: 6px 18px; border-radius: 30px; color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.15);"><i class="fas fa-check"></i> Gold standard</span>
+                            </div>
+                        </div>
+                        <div style="flex: 0.5; text-align: center; background: radial-gradient(circle, #1f1a0e, #0b0b0b); padding: 30px; border-radius: 40px; border: 1px solid rgba(212, 175, 55, 0.15);">
+                            <i class="fas fa-user-chef" style="font-size: 5rem; color: var(--gold);"></i>
+                            <div style="color: var(--gold); font-weight: 600; margin-top: 8px; letter-spacing: 2px;">MASTER ARTISAN</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact">
+            <div class="container">
+                <div style="margin: 60px 0; text-align: center;">
+                    <h2 class="section-title">Get in <span>Touch</span></h2>
+                    <div class="gold-divider"></div>
+                    <p style="color: #a6977d; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+                        Visit us in Nairobi, call, or send a message — we'd love to hear from you!
+                    </p>
+                    <div style="margin-top: 30px; display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
+                        <div><i class="fas fa-phone-alt" style="color: var(--gold);"></i> <a href="tel:+254790499261" style="color: #a6977d; text-decoration: none;">+254 790 499261</a></div>
+                        <div><i class="fas fa-envelope" style="color: var(--gold);"></i> <a href="mailto:shiimaina106@gmail.com" style="color: #a6977d; text-decoration: none;">shiimaina106@gmail.com</a></div>
+                        <div><i class="fas fa-map-pin" style="color: var(--gold);"></i> Nairobi, Kenya</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <div class="container">
+                <div class="footer-grid reveal-stagger">
+                    <div class="footer-col">
+                        <h4>Pure Golden Bliss</h4>
+                        <p>Artisan Bakery by Chef Briget</p>
+                        <p><i class="fas fa-map-pin" style="color: var(--gold);"></i> Nairobi, Kenya</p>
+                        <p>
+                            <i class="fas fa-phone-alt" style="color: var(--gold);"></i>
+                            <a href="tel:+254790499261" style="color: #a6977d; text-decoration: none;">+254 790 499261</a>
+                        </p>
+                        <p>
+                            <i class="fas fa-envelope" style="color: var(--gold);"></i>
+                            <a href="mailto:shiimaina106@gmail.com">shiimaina106@gmail.com</a>
+                        </p>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Opening Hours</h4>
+                        <p>Mon – Sat: 8:00 am – 8:00 pm</p>
+                        <p>Sunday: 9:00 am – 4:00 pm</p>
+                        <p style="color: var(--gold);"><i class="fas fa-cookie-bite"></i> Fresh daily</p>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Quick Links</h4>
+                        <div class="footer-buttons">
+                            <a href="#" data-view="gallery" class="footer-btn footer-btn-gallery">
+                                <i class="fas fa-images"></i> Gallery
+                            </a>
+                            <a href="#" onclick="whatsappInquiry('general')" class="footer-btn footer-btn-wa">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </a>
+                            <a href="tel:+254790499261" class="footer-btn footer-btn-call">
+                                <i class="fas fa-phone-alt"></i> Call
+                            </a>
+                        </div>
+                        <div class="footer-social">
+                            <a href="https://www.instagram.com/b._mist/#" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" onclick="whatsappInquiry('general')" aria-label="WhatsApp">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <a href="tel:+254790499261" aria-label="Call">
+                                <i class="fas fa-phone-alt"></i>
+                            </a>
+                            <a href="admin.html" aria-label="Admin Upload" style="color: #D4AF37; opacity: 0.25; font-size: 1.2rem; transition: 0.3s;" title="Admin Upload">
+                                <i class="fas fa-lock"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="copyright">
+                    &copy; 2026 <span>Pure Golden Bliss</span> — Artisan Baked Goods. Made with passion &amp; the finest ingredients.
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!-- ========== END MAIN CONTENT ========== -->
+
+    <!-- ========== GALLERY PAGE ========== -->
+    <div class="gallery-page" id="galleryPage">
         <div class="container">
-            <div style="margin-top: 60px;">
+            <div style="margin-top: 40px;">
                 <h2 class="section-title">Our <span>Bakery</span> Gallery</h2>
                 <div class="gold-divider"></div>
                 <p class="section-sub">A glimpse of our delicious creations — fresh from our kitchen</p>
@@ -857,114 +630,13 @@
             <div class="gallery-grid" id="galleryGrid">
                 <div class="gallery-empty">Loading gallery...</div>
             </div>
-        </div>
-    </div>
-
-    <!-- ========== ABOUT SECTION ========== -->
-    <div class="page-section" id="section-about">
-        <div class="container">
-            <div class="reveal" style="margin: 70px 0; background: var(--black-soft); border-radius: 40px; padding: 48px 32px; border: 1px solid rgba(212, 175, 55, 0.10); box-shadow: var(--shadow-gold);">
-                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 40px;">
-                    <div style="flex: 1;">
-                        <h3 style="font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold);">
-                            <i class="fas fa-utensils"></i> Chef Briget
-                        </h3>
-                        <p style="font-size: 1.1rem; color: #d4c9b5; margin: 16px 0;">
-                            <em>“Crafted with Passion, Served with Love.”</em>
-                        </p>
-                        <p style="color: #b5aa95;">
-                            With years of artisanal baking experience, Chef Briget brings together the finest ingredients
-                            to create golden, unforgettable treats. Every cake, cookie, and cupcake tells a story of warmth
-                            and dedication.
-                        </p>
-                        <div style="margin-top: 20px; display: flex; gap: 20px; flex-wrap: wrap;">
-                            <span style="background: rgba(212, 175, 55, 0.12); padding: 6px 18px; border-radius: 30px; color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.15);"><i class="fas fa-check"></i> Pure ingredients</span>
-                            <span style="background: rgba(212, 175, 55, 0.12); padding: 6px 18px; border-radius: 30px; color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.15);"><i class="fas fa-check"></i> Small batches</span>
-                            <span style="background: rgba(212, 175, 55, 0.12); padding: 6px 18px; border-radius: 30px; color: var(--gold); border: 1px solid rgba(212, 175, 55, 0.15);"><i class="fas fa-check"></i> Gold standard</span>
-                        </div>
-                    </div>
-                    <div style="flex: 0.5; text-align: center; background: radial-gradient(circle, #1f1a0e, #0b0b0b); padding: 30px; border-radius: 40px; border: 1px solid rgba(212, 175, 55, 0.15);">
-                        <i class="fas fa-user-chef" style="font-size: 5rem; color: var(--gold);"></i>
-                        <div style="color: var(--gold); font-weight: 600; margin-top: 8px; letter-spacing: 2px;">MASTER ARTISAN</div>
-                    </div>
-                </div>
+            <div style="text-align: center; margin: 40px 0;">
+                <a href="#" data-view="home" style="color: var(--gold); text-decoration: none; font-size: 1.1rem; border: 1px solid var(--gold); padding: 10px 30px; border-radius: 40px; transition: 0.3s;" onmouseover="this.style.background='var(--gold)';this.style.color='#0B0B0B'" onmouseout="this.style.background='transparent';this.style.color='var(--gold)'">
+                    <i class="fas fa-arrow-left"></i> Back to Home
+                </a>
             </div>
         </div>
     </div>
-
-    <!-- ========== CONTACT SECTION ========== -->
-    <div class="page-section" id="section-contact">
-        <div class="container">
-            <div style="margin: 60px 0; text-align: center;">
-                <h2 class="section-title">Get in <span>Touch</span></h2>
-                <div class="gold-divider"></div>
-                <p style="color: #a6977d; font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
-                    Visit us in Nairobi, call, or send a message — we'd love to hear from you!
-                </p>
-                <div style="margin-top: 30px; display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
-                    <div><i class="fas fa-phone-alt" style="color: var(--gold);"></i> <a href="tel:+254790499261" style="color: #a6977d; text-decoration: none;">+254 790 499261</a></div>
-                    <div><i class="fas fa-envelope" style="color: var(--gold);"></i> <a href="mailto:shiimaina106@gmail.com" style="color: #a6977d; text-decoration: none;">shiimaina106@gmail.com</a></div>
-                    <div><i class="fas fa-map-pin" style="color: var(--gold);"></i> Nairobi, Kenya</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========== FOOTER ========== -->
-    <footer id="contact">
-        <div class="container">
-            <div class="footer-grid reveal-stagger">
-                <div class="footer-col">
-                    <h4>Pure Golden Bliss</h4>
-                    <p>Artisan Bakery by Chef Briget</p>
-                    <p><i class="fas fa-map-pin" style="color: var(--gold);"></i> Nairobi, Kenya</p>
-                    <p>
-                        <i class="fas fa-phone-alt" style="color: var(--gold);"></i>
-                        <a href="tel:+254790499261" style="color: #a6977d; text-decoration: none;">+254 790 499261</a>
-                    </p>
-                    <p>
-                        <i class="fas fa-envelope" style="color: var(--gold);"></i>
-                        <a href="mailto:shiimaina106@gmail.com">shiimaina106@gmail.com</a>
-                    </p>
-                </div>
-                <div class="footer-col">
-                    <h4>Opening Hours</h4>
-                    <p>Mon – Sat: 8:00 am – 8:00 pm</p>
-                    <p>Sunday: 9:00 am – 4:00 pm</p>
-                    <p style="color: var(--gold);"><i class="fas fa-cookie-bite"></i> Fresh daily</p>
-                </div>
-                <div class="footer-col">
-                    <h4>Connect with us</h4>
-                    <div class="footer-social">
-                        <a href="https://www.instagram.com/b._mist/#" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" onclick="whatsappInquiry('general')" aria-label="WhatsApp">
-                            <i class="fab fa-whatsapp"></i>
-                        </a>
-                        <a href="tel:+254790499261" aria-label="Call">
-                            <i class="fas fa-phone-alt"></i>
-                        </a>
-                        <!-- Admin link – subtle lock icon -->
-                        <a href="admin.html" aria-label="Admin Upload" style="color: #D4AF37; opacity: 0.25; font-size: 1.2rem; transition: 0.3s;" title="Admin Upload">
-                            <i class="fas fa-lock"></i>
-                        </a>
-                    </div>
-                    <div class="footer-buttons">
-                        <a href="#" onclick="whatsappInquiry('general')" class="footer-btn footer-btn-wa">
-                            <i class="fab fa-whatsapp"></i> WhatsApp
-                        </a>
-                        <a href="tel:+254790499261" class="footer-btn footer-btn-call">
-                            <i class="fas fa-phone-alt"></i> Call
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="copyright">
-                &copy; 2026 <span>Pure Golden Bliss</span> — Artisan Baked Goods. Made with passion &amp; the finest ingredients.
-            </div>
-        </div>
-    </footer>
 
     <!-- ========== LIGHTBOX ========== -->
     <div class="lightbox-overlay" id="lightboxOverlay" role="dialog" aria-modal="true" aria-label="Enlarged image">
@@ -987,9 +659,7 @@
 
     <!-- ========== JAVASCRIPT ========== -->
     <script>
-        // ============================================================
-        //  FIREBASE CONFIG – YOUR CONFIGURATION
-        // ============================================================
+        // Firebase Config (same as before)
         const firebaseConfig = {
             apiKey: "AIzaSyC80QmqF9l03rzPOfCo9P8BEpj67B5_hvQ",
             authDomain: "bridgets-bakery-gallery.firebaseapp.com",
@@ -999,15 +669,15 @@
             messagingSenderId: "51437476915",
             appId: "1:51437476915:web:069bce9c3bdddff4001746"
         };
-        // Firebase SDK scripts load with `defer`, so init happens once the
-        // DOM (and by spec, all deferred scripts) are ready — avoids a
-        // "firebase is not defined" race on slower connections.
         let db;
         function initFirebase() {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.firestore();
+            if (typeof firebase !== 'undefined') {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+            } else {
+                console.warn('Firebase SDK not loaded yet');
+            }
         }
-        // ============================================================
 
         const PHONE_NUMBER = '254790499261';
 
@@ -1030,7 +700,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             initFirebase();
 
-            // ===== LIGHTBOX (click-to-zoom) =====
+            // Lightbox
             const lightboxOverlay = document.getElementById('lightboxOverlay');
             const lightboxImg = document.getElementById('lightboxImg');
             const lightboxClose = document.getElementById('lightboxClose');
@@ -1052,22 +722,18 @@
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') closeLightbox();
             });
-            // Delegate clicks so it works for gallery images loaded later too
             document.addEventListener('click', function(e) {
                 const img = e.target.closest('.gallery-item img, .product-image');
                 if (img) openLightbox(img.src, img.alt);
             });
 
-            // ===== FLOATING WHATSAPP BUTTON =====
-            const floatBtn = document.getElementById('floatWaBtn');
-            if (floatBtn) {
-                floatBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    whatsappInquiry('general');
-                });
-            }
+            // Floating WhatsApp
+            document.getElementById('floatWaBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                whatsappInquiry('general');
+            });
 
-            // ===== STICKY HEADER + BACK TO TOP =====
+            // Sticky header + back to top
             const topBar = document.querySelector('.top-bar');
             const backToTop = document.getElementById('backToTop');
             const onScroll = () => {
@@ -1079,7 +745,7 @@
             onScroll();
             backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-            // ===== MOBILE NAV TOGGLE =====
+            // Mobile nav toggle
             const navToggle = document.getElementById('navToggle');
             const navList = document.getElementById('navLinks');
             navToggle.addEventListener('click', () => {
@@ -1095,90 +761,84 @@
                 });
             });
 
-            // ===== NAVIGATION: CONTINUOUS SCROLL + GALLERY ALONE =====
-            const navLinks = document.querySelectorAll('.nav-links a[data-section]');
-            const gallerySection = document.getElementById('section-gallery');
+            // View toggling
+            const mainContent = document.getElementById('mainContent');
+            const galleryPage = document.getElementById('galleryPage');
+            const navLinks = document.querySelectorAll('.nav-links a[data-view]');
             const scrollTargets = {
-                home: document.querySelector('.hero'),
-                products: document.getElementById('section-products'),
-                about: document.getElementById('section-about'),
-                contact: document.getElementById('section-contact')
+                home: document.querySelector('#home'),
+                products: document.querySelector('#products'),
+                about: document.querySelector('#about'),
+                contact: document.querySelector('#contact')
             };
-            const mainSections = [scrollTargets.products, scrollTargets.about, scrollTargets.contact];
 
-            function showGalleryAlone() {
-                mainSections.forEach(el => el && el.classList.add('hidden'));
-                document.querySelector('.hero')?.classList.add('hidden');
-                if (gallerySection) gallerySection.classList.remove('hidden');
-                loadGalleryFromFirestore();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-
-            function showMainScroll(scrollToKey) {
-                if (gallerySection) gallerySection.classList.add('hidden');
-                mainSections.forEach(el => el && el.classList.remove('hidden'));
-                document.querySelector('.hero')?.classList.remove('hidden');
-                const target = scrollTargets[scrollToKey];
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                } else {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            }
-
-            function setActiveNav(sectionId) {
+            function switchView(view) {
                 navLinks.forEach(link => {
-                    link.classList.toggle('active', link.dataset.section === sectionId);
+                    link.classList.toggle('active', link.dataset.view === view);
                 });
-            }
 
-            function switchSection(sectionId) {
-                if (sectionId === 'gallery') {
-                    showGalleryAlone();
+                if (view === 'gallery') {
+                    mainContent.classList.add('hidden');
+                    galleryPage.classList.add('active');
+                    loadGalleryFromFirestore();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
-                    showMainScroll(sectionId);
+                    mainContent.classList.remove('hidden');
+                    galleryPage.classList.remove('active');
+                    const target = scrollTargets[view];
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    } else {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
                 }
-                setActiveNav(sectionId);
             }
 
-            // Nav click handlers
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const section = this.dataset.section;
-                    if (section) switchSection(section);
+                    const view = this.dataset.view;
+                    if (view) switchView(view);
                 });
             });
 
-            // Scroll-spy: highlight the right nav item while scrolling the main page
-            const spyObserver = new IntersectionObserver((entries) => {
-                if (!gallerySection.classList.contains('hidden')) return; // gallery view active, skip
+            document.querySelectorAll('a[data-view]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const view = this.dataset.view;
+                    if (view) switchView(view);
+                });
+            });
+
+            // Scroll reveal
+            const revealObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        const match = Object.entries(scrollTargets).find(([, el]) => el === entry.target);
-                        if (match) setActiveNav(match[0]);
+                        entry.target.classList.add('in-view');
+                        revealObserver.unobserve(entry.target);
                     }
                 });
-            }, { rootMargin: '-40% 0px -50% 0px' });
-            Object.values(scrollTargets).forEach(el => el && spyObserver.observe(el));
-
-            // Explore treats / Order Now buttons scroll within the page
-            document.querySelector('.hero-content a[data-section="products"]')?.addEventListener('click', function(e) {
-                e.preventDefault();
-                showMainScroll('products');
-                setActiveNav('products');
+            }, { threshold: 0.15 });
+            document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
+                revealObserver.observe(el);
             });
+            setTimeout(() => {
+                document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
+                    if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+                        el.classList.add('in-view');
+                    }
+                });
+            }, 500);
 
-            // ===== GALLERY LOAD FROM FIRESTORE (with descriptions) =====
+            // Gallery load
             let galleryLoaded = false;
-
             async function loadGalleryFromFirestore() {
                 const grid = document.getElementById('galleryGrid');
-                if (!grid) return;
-                if (galleryLoaded) return;
+                if (!grid || galleryLoaded) return;
                 grid.innerHTML = Array.from({ length: 6 }).map(() => '<div class="skeleton-card"></div>').join('');
 
                 try {
+                    if (!db) throw new Error('Firebase not initialized');
                     const docRef = db.collection('gallery').doc('images');
                     const doc = await docRef.get();
                     if (doc.exists) {
@@ -1189,7 +849,7 @@
                         } else {
                             items.forEach(item => {
                                 const url = typeof item === 'string' ? item : item.url;
-                                const description = (typeof item === 'string') ? '' : (item.description || '');
+                                const description = typeof item === 'string' ? '' : (item.description || '');
                                 const wrapper = document.createElement('div');
                                 wrapper.className = 'gallery-item';
                                 const img = document.createElement('img');
@@ -1207,7 +867,6 @@
                             });
                         }
                     } else {
-                        // Create the document if it doesn't exist
                         await db.collection('gallery').doc('images').set({ urls: [] });
                         grid.innerHTML = '<div class="gallery-empty">No images yet. Check back soon!</div>';
                     }
@@ -1218,29 +877,10 @@
                 }
             }
 
-            // ===== SCROLL REVEAL (only for visible sections) =====
-            const revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('in-view');
-                        revealObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.15 });
-
-            document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
-                revealObserver.observe(el);
-            });
-
-            // Also check already visible sections after load
+            // Preload gallery in background
             setTimeout(() => {
-                document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
-                    const rect = el.getBoundingClientRect();
-                    if (rect.top < window.innerHeight - 100) {
-                        el.classList.add('in-view');
-                    }
-                });
-            }, 500);
+                if (db) loadGalleryFromFirestore();
+            }, 1000);
         });
 
         window.whatsappInquiry = whatsappInquiry;
