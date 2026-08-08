@@ -51,6 +51,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
+    <!-- ========== FIREBASE SDK ========== -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
     <style>
         /* ===== GOLD & BLACK THEME ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -899,10 +903,28 @@
 
     <!-- ========== JAVASCRIPT ========== -->
     <script>
+        // ============================================================
+        //  FIREBASE CONFIG – YOUR CONFIGURATION
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyC80QmqF9l03rzPOfCo9P8BEpj67B5_hvQ",
+            authDomain: "bridgets-bakery-gallery.firebaseapp.com",
+            databaseURL: "https://bridgets-bakery-gallery-default-rtdb.firebaseio.com",
+            projectId: "bridgets-bakery-gallery",
+            storageBucket: "bridgets-bakery-gallery.firebasestorage.app",
+            messagingSenderId: "51437476915",
+            appId: "1:51437476915:web:069bce9c3bdddff4001746"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        // ============================================================
+
         const PHONE_NUMBER = '254790499261';
+
         function getWhatsAppUrl(message) {
             return `https://wa.me/${PHONE_NUMBER}?text=${encodeURIComponent(message)}`;
         }
+
         function whatsappInquiry(productType) {
             let message = '';
             switch (productType.toUpperCase()) {
@@ -916,6 +938,43 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+            // ===== FLOATING WHATSAPP BUTTON =====
+            const floatBtn = document.getElementById('floatWaBtn');
+            if (floatBtn) {
+                floatBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    whatsappInquiry('general');
+                });
+            }
+
+            // ===== STICKY HEADER + BACK TO TOP =====
+            const topBar = document.querySelector('.top-bar');
+            const backToTop = document.getElementById('backToTop');
+            const onScroll = () => {
+                const scrolled = window.scrollY > 30;
+                topBar.classList.toggle('scrolled', scrolled);
+                backToTop.classList.toggle('show', window.scrollY > 400);
+            };
+            document.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+            backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+            // ===== MOBILE NAV TOGGLE =====
+            const navToggle = document.getElementById('navToggle');
+            const navList = document.getElementById('navLinks');
+            navToggle.addEventListener('click', () => {
+                const isOpen = navList.classList.toggle('open');
+                navToggle.classList.toggle('open', isOpen);
+                navToggle.setAttribute('aria-expanded', String(isOpen));
+            });
+            navList.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navList.classList.remove('open');
+                    navToggle.classList.remove('open');
+                    navToggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+
             // ===== NAVIGATION: SHOW/HIDE SECTIONS =====
             const navLinks = document.querySelectorAll('.nav-links a[data-section]');
             const sections = {
@@ -947,9 +1006,9 @@
                     link.classList.toggle('active', link.dataset.section === sectionId);
                 });
 
-                // if gallery, load images (if not loaded yet)
+                // if gallery, load images from Firestore
                 if (sectionId === 'gallery') {
-                    loadGallery();
+                    loadGalleryFromFirestore();
                 }
 
                 // scroll to top
@@ -971,63 +1030,44 @@
                 switchSection('products');
             });
 
-            // ===== GALLERY LOAD =====
+            // ===== GALLERY LOAD FROM FIRESTORE =====
             let galleryLoaded = false;
-            function loadGallery() {
-                if (galleryLoaded) return;
+
+            async function loadGalleryFromFirestore() {
                 const grid = document.getElementById('galleryGrid');
                 if (!grid) return;
+                // If already loaded, don't reload
+                if (galleryLoaded) return;
+                grid.innerHTML = '<div class="gallery-empty">Loading gallery...</div>';
 
-                fetch('gallery.json')
-                    .then(response => response.json())
-                    .then(data => {
+                try {
+                    const docRef = db.collection('gallery').doc('images');
+                    const doc = await docRef.get();
+                    if (doc.exists) {
+                        const urls = doc.data().urls || [];
                         grid.innerHTML = '';
-                        if (data.images && data.images.length > 0) {
-                            data.images.forEach(url => {
+                        if (urls.length === 0) {
+                            grid.innerHTML = '<div class="gallery-empty">No images yet. Check back soon!</div>';
+                        } else {
+                            urls.forEach(url => {
                                 const img = document.createElement('img');
                                 img.src = url;
                                 img.alt = 'Bakery item';
                                 img.loading = 'lazy';
                                 grid.appendChild(img);
                             });
-                        } else {
-                            grid.innerHTML = '<div class="gallery-empty">No images yet. Check back soon!</div>';
                         }
-                        galleryLoaded = true;
-                    })
-                    .catch(error => {
-                        console.error('Error loading gallery:', error);
-                        grid.innerHTML = '<div class="gallery-empty">Could not load gallery. Please refresh.</div>';
-                    });
+                    } else {
+                        // Document doesn't exist – create it
+                        await db.collection('gallery').doc('images').set({ urls: [] });
+                        grid.innerHTML = '<div class="gallery-empty">No images yet. Check back soon!</div>';
+                    }
+                    galleryLoaded = true;
+                } catch (err) {
+                    console.error('Error loading gallery:', err);
+                    grid.innerHTML = '<div class="gallery-empty">Could not load gallery. Please refresh.</div>';
+                }
             }
-
-            // ===== STICKY HEADER + BACK TO TOP =====
-            const topBar = document.querySelector('.top-bar');
-            const backToTop = document.getElementById('backToTop');
-            const onScroll = () => {
-                const scrolled = window.scrollY > 30;
-                topBar.classList.toggle('scrolled', scrolled);
-                backToTop.classList.toggle('show', window.scrollY > 400);
-            };
-            document.addEventListener('scroll', onScroll, { passive: true });
-            onScroll();
-            backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-            // ===== MOBILE NAV TOGGLE =====
-            const navToggle = document.getElementById('navToggle');
-            const navList = document.getElementById('navLinks');
-            navToggle.addEventListener('click', () => {
-                const isOpen = navList.classList.toggle('open');
-                navToggle.classList.toggle('open', isOpen);
-                navToggle.setAttribute('aria-expanded', String(isOpen));
-            });
-            navList.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navList.classList.remove('open');
-                    navToggle.classList.remove('open');
-                    navToggle.setAttribute('aria-expanded', 'false');
-                });
-            });
 
             // ===== SCROLL REVEAL (only for visible sections) =====
             const revealObserver = new IntersectionObserver((entries) => {
