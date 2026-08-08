@@ -3,254 +3,279 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bakery Admin – Upload Gallery</title>
+  <title>Bakery Admin – Upload</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0B0B0B; color: #F8F6F0; font-family: 'Montserrat', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-    .container { max-width: 640px; width: 100%; background: #151515; padding: 2rem; border-radius: 24px; border: 1px solid rgba(212, 175, 55, 0.25); box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7); }
+    .container { max-width: 640px; width: 100%; background: #151515; padding: 2rem; border-radius: 24px; border: 1px solid rgba(212, 175, 55, 0.25); box-shadow: 0 12px 48px rgba(0,0,0,0.7); }
     .admin-icon { font-size: 2.8rem; display: block; text-align: center; margin-bottom: 4px; }
-    h1 { color: #D4AF37; font-family: 'Playfair Display', serif; text-align: center; font-size: 1.9rem; font-weight: 600; }
-    .subtitle { text-align: center; color: #a6977d; font-size: 0.9rem; margin-top: 4px; margin-bottom: 28px; font-weight: 300; }
+    h1 { color: #D4AF37; font-family: 'Playfair Display', serif; text-align: center; font-size: 1.9rem; }
+    .subtitle { text-align: center; color: #a6977d; font-size: 0.9rem; margin-bottom: 28px; }
     .form-group { margin-bottom: 18px; }
-    label { display: block; font-size: 0.8rem; font-weight: 500; color: #c4b8a2; margin-bottom: 5px; letter-spacing: 0.5px; }
-    .input-wrapper { position: relative; display: flex; align-items: center; background: #1e1e1e; border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 10px; transition: border-color 0.3s, box-shadow 0.3s; }
-    .input-wrapper:focus-within { border-color: #D4AF37; box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15); }
+    label { display: block; font-size: 0.8rem; font-weight: 500; color: #c4b8a2; margin-bottom: 5px; }
+    .input-wrapper { position: relative; display: flex; align-items: center; background: #1e1e1e; border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 10px; }
     .input-wrapper input { width: 100%; padding: 14px 16px; background: transparent; border: none; color: #F8F6F0; font-size: 1rem; font-family: 'Montserrat', sans-serif; outline: none; }
-    .input-wrapper input::placeholder { color: #6a5f4e; }
-    .toggle-btn { background: transparent; border: none; color: #8a7d66; padding: 0 16px; cursor: pointer; font-size: 1.2rem; transition: color 0.3s; display: flex; align-items: center; justify-content: center; height: 100%; min-height: 52px; }
-    .toggle-btn:hover { color: #D4AF37; }
-    .btn-primary { width: 100%; padding: 14px; background: #D4AF37; color: #0B0B0B; border: none; border-radius: 10px; font-weight: 700; font-size: 1rem; font-family: 'Montserrat', sans-serif; cursor: pointer; transition: background 0.3s, transform 0.15s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .toggle-btn { background: transparent; border: none; color: #8a7d66; padding: 0 16px; cursor: pointer; font-size: 1.2rem; }
+    .btn-primary { width: 100%; padding: 14px; background: #D4AF37; color: #0B0B0B; border: none; border-radius: 10px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .btn-primary:hover { background: #b8962e; }
-    .btn-primary:active { transform: scale(0.98); }
-    .btn-upload { width: 100%; padding: 16px; background: #D4AF37; color: #0B0B0B; border: none; border-radius: 10px; font-weight: 700; font-size: 1rem; font-family: 'Montserrat', sans-serif; cursor: pointer; transition: background 0.3s, transform 0.15s; display: flex; align-items: center; justify-content: center; gap: 12px; }
+    .btn-upload { width: 100%; padding: 14px; background: #D4AF37; color: #0B0B0B; border: none; border-radius: 10px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; }
     .btn-upload:hover { background: #b8962e; }
-    .btn-upload:active { transform: scale(0.98); }
     .status-msg { text-align: center; font-size: 0.85rem; margin-top: 12px; min-height: 1.6em; }
     .status-msg.error { color: #ff6b6b; }
     .status-msg.success { color: #6bff6b; }
     .status-msg.info { color: #a6977d; }
     .hidden { display: none !important; }
     .divider { border: none; border-top: 1px solid rgba(212, 175, 55, 0.15); margin: 28px 0 24px; }
-    .preview-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; justify-content: center; min-height: 60px; }
-    .preview-grid img { max-width: 120px; max-height: 120px; width: 100%; height: 120px; object-fit: cover; border-radius: 12px; border: 2px solid rgba(212, 175, 55, 0.3); background: #1a1a1a; transition: transform 0.25s ease; }
-    .preview-grid img:hover { transform: scale(1.04); }
-    .preview-empty { color: #6a5f4e; text-align: center; width: 100%; padding: 12px 0; font-size: 0.9rem; }
-    .back-link { display: block; text-align: center; margin-top: 24px; color: #6a5f4e; text-decoration: none; font-size: 0.85rem; transition: color 0.3s; }
+    .preview-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; justify-content: center; }
+    .preview-grid img { max-width: 120px; max-height: 120px; border-radius: 12px; border: 2px solid rgba(212, 175, 55, 0.3); background: #1a1a1a; }
+    .preview-empty { color: #6a5f4e; text-align: center; width: 100%; padding: 12px 0; }
+    .back-link { display: block; text-align: center; margin-top: 24px; color: #6a5f4e; text-decoration: none; font-size: 0.85rem; }
     .back-link:hover { color: #D4AF37; }
-    .back-link i { margin-right: 6px; }
-    @media (max-width: 480px) { .container { padding: 1.25rem; } h1 { font-size: 1.5rem; } .input-wrapper input { padding: 12px 14px; font-size: 0.95rem; } .toggle-btn { padding: 0 12px; min-height: 48px; } .btn-primary, .btn-upload { padding: 12px; font-size: 0.95rem; } .preview-grid img { max-width: 100px; max-height: 100px; height: 100px; } }
-    @media (max-width: 380px) { .container { padding: 1rem; } .preview-grid img { max-width: 80px; max-height: 80px; height: 80px; } }
+    .file-input-wrapper { position: relative; margin: 12px 0; }
+    .file-input-wrapper input[type="file"] { width: 100%; padding: 12px; background: #1e1e1e; border: 1px dashed rgba(212, 175, 55, 0.3); border-radius: 10px; color: #c4b8a2; font-family: 'Montserrat', sans-serif; }
+    .file-input-wrapper input[type="file"]::file-selector-button { background: #D4AF37; color: #0B0B0B; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-right: 12px; }
+    .upload-progress { background: #1e1e1e; border-radius: 10px; height: 8px; margin: 12px 0; overflow: hidden; display: none; }
+    .upload-progress .bar { width: 0%; height: 100%; background: #D4AF37; transition: width 0.3s; }
+    .url-box { background: #1e1e1e; border: 1px solid #D4AF37; border-radius: 10px; padding: 12px; margin-top: 12px; word-break: break-all; display: none; }
+    .url-box code { color: #D4AF37; font-size: 0.85rem; }
+    .copy-btn { background: transparent; border: 1px solid #D4AF37; color: #D4AF37; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; margin-top: 8px; }
+    .copy-btn:hover { background: #D4AF37; color: #0B0B0B; }
   </style>
 </head>
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <!-- Header -->
-    <span class="admin-icon">🧁</span>
-    <h1>Gallery Admin</h1>
-    <p class="subtitle">Upload new images to your bakery gallery</p>
+  <span class="admin-icon">🧁</span>
+  <h1>Gallery Admin</h1>
+  <p class="subtitle">Upload new images to your bakery gallery</p>
 
-    <!-- Login Section -->
-    <div id="loginSection">
-      <div class="form-group">
-        <label for="adminPassword">Admin Password</label>
-        <div class="input-wrapper">
-          <input type="password" id="adminPassword" placeholder="Enter your admin password" autocomplete="off" />
-          <button class="toggle-btn" id="togglePasswordBtn" type="button" aria-label="Toggle password visibility">
-            <i class="fas fa-eye" id="toggleIcon"></i>
-          </button>
-        </div>
+  <!-- Login Section -->
+  <div id="loginSection">
+    <div class="form-group">
+      <label for="adminPassword">Admin Password</label>
+      <div class="input-wrapper">
+        <input type="password" id="adminPassword" placeholder="Enter your admin password" />
+        <button class="toggle-btn" id="togglePasswordBtn" type="button">
+          <i class="fas fa-eye" id="toggleIcon"></i>
+        </button>
       </div>
-
-      <button class="btn-primary" id="loginBtn">
-        <i class="fas fa-unlock"></i> Login
-      </button>
-
-      <div id="loginStatus" class="status-msg info">Enter your password to access the upload panel.</div>
     </div>
-
-    <!-- Upload Section (hidden until login) -->
-    <div id="uploadSection" class="hidden">
-      <p style="color: #a6977d; font-size: 0.95rem; text-align: center; margin-bottom: 20px;">
-        Upload a new bakery image. It will appear in the preview below.
-      </p>
-
-      <div id="uploadWidgetContainer"></div>
-
-      <hr class="divider" />
-
-      <h3 style="color: #D4AF37; font-family: 'Playfair Display', serif; text-align: center; font-size: 1.2rem; margin-bottom: 4px;">
-        <i class="fas fa-images"></i> Recent Uploads
-      </h3>
-      <p style="color: #6a5f4e; font-size: 0.8rem; text-align: center; margin-bottom: 12px;">
-        After uploading, copy the URL from the alert and add it to your <code style="color: #D4AF37;">gallery.json</code>.
-      </p>
-
-      <div id="previewGrid" class="preview-grid">
-        <div class="preview-empty">No images uploaded yet.</div>
-      </div>
-
-      <div id="uploadStatus" class="status-msg info"></div>
-    </div>
-
-    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Website</a>
+    <button class="btn-primary" id="loginBtn"><i class="fas fa-unlock"></i> Login</button>
+    <div id="loginStatus" class="status-msg info">Enter your password to access the upload panel.</div>
   </div>
 
-  <!-- Cloudinary Upload Widget -->
-  <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+  <!-- Upload Section -->
+  <div id="uploadSection" class="hidden">
+    <p style="color: #a6977d; font-size: 0.95rem; text-align: center; margin-bottom: 16px;">
+      Select an image to upload. After upload, copy the URL and add it to <code>gallery.json</code>.
+    </p>
 
-  <script>
-    (function() {
-      'use strict';
+    <div class="file-input-wrapper">
+      <input type="file" id="fileInput" accept="image/*" />
+    </div>
 
-      // === CONFIGURATION (UPDATED) ===
-      const CLOUD_NAME = 'dwitbu0d';
-      const UPLOAD_PRESET = 'bakery_unsigned';  // Use the new unsigned preset
-      // No API_BASE needed anymore – we removed the signed signature.
+    <div class="upload-progress" id="progressContainer">
+      <div class="bar" id="progressBar"></div>
+    </div>
 
-      // === DOM refs ===
-      const loginSection = document.getElementById('loginSection');
-      const uploadSection = document.getElementById('uploadSection');
-      const passwordInput = document.getElementById('adminPassword');
-      const toggleBtn = document.getElementById('togglePasswordBtn');
-      const toggleIcon = document.getElementById('toggleIcon');
-      const loginBtn = document.getElementById('loginBtn');
-      const loginStatus = document.getElementById('loginStatus');
-      const previewGrid = document.getElementById('previewGrid');
-      const uploadStatus = document.getElementById('uploadStatus');
-      const widgetContainer = document.getElementById('uploadWidgetContainer');
+    <button class="btn-upload" id="uploadBtn"><i class="fas fa-cloud-upload-alt"></i> Upload</button>
 
-      // --- Password toggle ---
-      let passwordVisible = false;
-      toggleBtn.addEventListener('click', function() {
-        passwordVisible = !passwordVisible;
-        passwordInput.type = passwordVisible ? 'text' : 'password';
-        toggleIcon.className = passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye';
+    <div id="uploadStatus" class="status-msg info"></div>
+
+    <div class="url-box" id="urlBox">
+      <p style="color: #a6977d; font-size: 0.8rem;">Uploaded URL:</p>
+      <code id="imageUrlDisplay"></code>
+      <br />
+      <button class="copy-btn" id="copyUrlBtn"><i class="fas fa-copy"></i> Copy URL</button>
+    </div>
+
+    <hr class="divider" />
+
+    <h3 style="color: #D4AF37; font-family: 'Playfair Display', serif; text-align: center; font-size: 1.2rem;">
+      <i class="fas fa-images"></i> Recent Uploads
+    </h3>
+    <div id="previewGrid" class="preview-grid">
+      <div class="preview-empty">No images uploaded yet.</div>
+    </div>
+  </div>
+
+  <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Website</a>
+</div>
+
+<script>
+  (function() {
+    // ============================================================
+    //  CONFIGURATION – EDIT THESE TO MATCH YOUR SETUP
+    // ============================================================
+    // 🔁 Your Cloudinary cloud name – check your dashboard!
+    const CLOUD_NAME = 'dwitbu0d';   // CHANGE THIS if different
+    // The unsigned upload preset you created
+    const UPLOAD_PRESET = 'bakery_unsigned';
+    // Admin password – change this to your own
+    const ADMIN_PASSWORD = 'BridgetBakery2026!';
+    // ============================================================
+
+    const loginSection = document.getElementById('loginSection');
+    const uploadSection = document.getElementById('uploadSection');
+    const passwordInput = document.getElementById('adminPassword');
+    const toggleBtn = document.getElementById('togglePasswordBtn');
+    const toggleIcon = document.getElementById('toggleIcon');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginStatus = document.getElementById('loginStatus');
+    const fileInput = document.getElementById('fileInput');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const uploadStatus = document.getElementById('uploadStatus');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    const urlBox = document.getElementById('urlBox');
+    const imageUrlDisplay = document.getElementById('imageUrlDisplay');
+    const copyBtn = document.getElementById('copyUrlBtn');
+    const previewGrid = document.getElementById('previewGrid');
+
+    // --- Password toggle ---
+    let passwordVisible = false;
+    toggleBtn.addEventListener('click', function() {
+      passwordVisible = !passwordVisible;
+      passwordInput.type = passwordVisible ? 'text' : 'password';
+      toggleIcon.className = passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye';
+    });
+
+    // --- Load preview from localStorage ---
+    function loadPreview() {
+      const stored = JSON.parse(localStorage.getItem('bakeryGallery') || '[]');
+      previewGrid.innerHTML = '';
+      if (stored.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'preview-empty';
+        empty.textContent = 'No images uploaded yet.';
+        previewGrid.appendChild(empty);
+        return;
+      }
+      stored.forEach(url => {
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = 'Uploaded bakery item';
+        img.loading = 'lazy';
+        previewGrid.appendChild(img);
       });
+    }
 
-      // --- Load preview from localStorage ---
-      function loadPreview() {
-        const stored = JSON.parse(localStorage.getItem('bakeryGallery') || '[]');
-        previewGrid.innerHTML = '';
-        if (stored.length === 0) {
-          const empty = document.createElement('div');
-          empty.className = 'preview-empty';
-          empty.textContent = 'No images uploaded yet.';
-          previewGrid.appendChild(empty);
-          return;
-        }
-        stored.forEach(url => {
-          const img = document.createElement('img');
-          img.src = url;
-          img.alt = 'Uploaded bakery item';
-          img.loading = 'lazy';
-          previewGrid.appendChild(img);
-        });
+    function addToPreview(url) {
+      const stored = JSON.parse(localStorage.getItem('bakeryGallery') || '[]');
+      if (!stored.includes(url)) {
+        stored.push(url);
+        localStorage.setItem('bakeryGallery', JSON.stringify(stored));
       }
-
-      function addToPreview(url) {
-        const stored = JSON.parse(localStorage.getItem('bakeryGallery') || '[]');
-        if (!stored.includes(url)) {
-          stored.push(url);
-          localStorage.setItem('bakeryGallery', JSON.stringify(stored));
-        }
-        loadPreview();
-      }
-
-      // --- Login (password check only – no server needed) ---
-      loginBtn.addEventListener('click', handleLogin);
-      passwordInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') handleLogin();
-      });
-
-      function handleLogin() {
-        const password = passwordInput.value.trim();
-        if (!password) {
-          setStatus(loginStatus, 'Please enter your password.', 'error');
-          return;
-        }
-
-        // For simplicity, we'll hardcode a password check locally.
-        // You can change this to whatever you like, but it's stored in the JavaScript.
-        // For better security, you can still use the server check, but we'll keep it simple.
-        // We'll check against a local password (you can set it here).
-        const ADMIN_PASSWORD = 'BridgetBakery2026!'; // Change this to your password
-
-        if (password !== ADMIN_PASSWORD) {
-          setStatus(loginStatus, '❌ Incorrect password.', 'error');
-          return;
-        }
-
-        // Success
-        loginSection.classList.add('hidden');
-        uploadSection.classList.remove('hidden');
-        setStatus(loginStatus, '✅ Logged in successfully!', 'success');
-        loadPreview();
-        initUploadWidget();
-      }
-
-      function setStatus(el, message, type) {
-        el.textContent = message;
-        el.className = 'status-msg ' + type;
-      }
-
-      // --- Initialize Cloudinary Widget (unsigned) ---
-      let widget = null;
-
-      function initUploadWidget() {
-        if (widget) return;
-
-        widget = cloudinary.createUploadWidget({
-          cloudName: CLOUD_NAME,
-          uploadPreset: UPLOAD_PRESET,
-          multiple: false,
-          maxFiles: 1,
-          styles: {
-            palette: {
-              window: '#0B0B0B',
-              windowBorder: '#D4AF37',
-              tabIcon: '#D4AF37',
-              menuIcons: '#D4AF37',
-              textDark: '#F8F6F0',
-              textLight: '#a6977d',
-              link: '#D4AF37',
-              action: '#D4AF37',
-              inactiveTabIcon: '#666',
-              error: '#ff6b6b',
-              inProgress: '#D4AF37',
-              complete: '#6bff6b'
-            }
-          }
-        }, function(error, result) {
-          if (!error && result && result.event === 'success') {
-            const url = result.info.secure_url;
-            addToPreview(url);
-            alert('✅ Upload successful!\n\n📸 Image URL:\n' + url + '\n\n📌 Copy this URL and add it to your gallery.json file.');
-            setStatus(uploadStatus, '✅ Image uploaded successfully!', 'success');
-          } else if (result && result.event === 'close') {
-            setStatus(uploadStatus, 'Upload cancelled.', 'info');
-          } else if (error) {
-            console.error('Upload error:', error);
-            alert('❌ Upload failed: ' + (error.message || 'Unknown error'));
-            setStatus(uploadStatus, '❌ Upload failed. Check console for details.', 'error');
-          }
-        });
-
-        // Create upload button
-        widgetContainer.innerHTML = '';
-        const btn = document.createElement('button');
-        btn.className = 'btn-upload';
-        btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Upload New Image';
-        btn.onclick = function() { widget.open(); };
-        widgetContainer.appendChild(btn);
-      }
-
-      // Load preview on load
       loadPreview();
-    })();
-  </script>
+    }
+
+    // --- Login ---
+    loginBtn.addEventListener('click', handleLogin);
+    passwordInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') handleLogin();
+    });
+
+    function handleLogin() {
+      const password = passwordInput.value.trim();
+      if (!password) {
+        setStatus(loginStatus, 'Please enter your password.', 'error');
+        return;
+      }
+      if (password !== ADMIN_PASSWORD) {
+        setStatus(loginStatus, '❌ Incorrect password.', 'error');
+        return;
+      }
+      loginSection.classList.add('hidden');
+      uploadSection.classList.remove('hidden');
+      setStatus(loginStatus, '✅ Logged in successfully!', 'success');
+      loadPreview();
+    }
+
+    function setStatus(el, message, type) {
+      el.textContent = message;
+      el.className = 'status-msg ' + type;
+    }
+
+    // --- Upload function ---
+    uploadBtn.addEventListener('click', function() {
+      const file = fileInput.files[0];
+      if (!file) {
+        setStatus(uploadStatus, 'Please select an image file.', 'error');
+        return;
+      }
+
+      // Show progress
+      progressContainer.style.display = 'block';
+      progressBar.style.width = '0%';
+      setStatus(uploadStatus, '⏳ Uploading...', 'info');
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', UPLOAD_PRESET);
+      // Optional: add a folder
+      // formData.append('folder', 'bakery_gallery');
+
+      // Use XHR to track progress
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`);
+
+      xhr.upload.addEventListener('progress', function(e) {
+        if (e.lengthComputable) {
+          const percent = (e.loaded / e.total) * 100;
+          progressBar.style.width = percent + '%';
+        }
+      });
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          const data = JSON.parse(xhr.responseText);
+          const url = data.secure_url;
+          // Show URL
+          urlBox.style.display = 'block';
+          imageUrlDisplay.textContent = url;
+          setStatus(uploadStatus, '✅ Upload successful!', 'success');
+          // Add to preview
+          addToPreview(url);
+          // Clear file input
+          fileInput.value = '';
+          progressContainer.style.display = 'none';
+        } else {
+          // Try to get error message
+          let errorMsg = 'Unknown error';
+          try {
+            const errData = JSON.parse(xhr.responseText);
+            errorMsg = errData.error?.message || errorMsg;
+          } catch (e) {}
+          setStatus(uploadStatus, '❌ Upload failed: ' + errorMsg, 'error');
+          progressContainer.style.display = 'none';
+        }
+      };
+
+      xhr.onerror = function() {
+        setStatus(uploadStatus, '❌ Network error. Check your connection.', 'error');
+        progressContainer.style.display = 'none';
+      };
+
+      xhr.send(formData);
+    });
+
+    // --- Copy URL ---
+    copyBtn.addEventListener('click', function() {
+      const url = imageUrlDisplay.textContent;
+      if (url) {
+        navigator.clipboard.writeText(url).then(() => {
+          copyBtn.textContent = '✅ Copied!';
+          setTimeout(() => { copyBtn.textContent = '<i class="fas fa-copy"></i> Copy URL'; }, 2000);
+        });
+      }
+    });
+
+    // Load preview on page load
+    loadPreview();
+  })();
+</script>
 </body>
 </html>
