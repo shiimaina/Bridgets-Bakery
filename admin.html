@@ -114,14 +114,11 @@
     'use strict';
 
     // ============================================================
-    //  CONFIGURATION – USING YOUR EXACT PRESET
+    //  CONFIGURATION – USING YOUR NEW UNSIGNED PRESET
     // ============================================================
-    // Your Cloudinary cloud name
-    const CLOUD_NAME = 'dwitbu0d';
-    // Your upload preset name WITH apostrophe – use double quotes
-    const UPLOAD_PRESET = "bridget'sbakery";
-    // Your admin password – change this!
-    const ADMIN_PASSWORD = 'BridgetBakery2026!';
+    const CLOUD_NAME = 'dwtlbu0d';                // Your cloud name
+    const UPLOAD_PRESET = 'bakery_upload';         // Your new unsigned preset
+    const ADMIN_PASSWORD = 'BridgetBakery2026!';   // Change this to your own password
     // ============================================================
 
     const loginSection = document.getElementById('loginSection');
@@ -213,7 +210,6 @@
         return;
       }
 
-      // Validate file type
       if (!file.type.startsWith('image/')) {
         setStatus(uploadStatus, 'Please select a valid image file (JPEG, PNG, etc.).', 'error');
         return;
@@ -228,8 +224,8 @@
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', UPLOAD_PRESET);
-      // Optional: add folder to organise
-      // formData.append('folder', 'bridgetsbakery');
+      // Optional: add a folder if you want to organize
+      // formData.append('folder', 'bakery_gallery');
 
       const xhr = new XMLHttpRequest();
       xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`);
@@ -246,7 +242,6 @@
         if (xhr.status === 200) {
           const data = JSON.parse(xhr.responseText);
           const url = data.secure_url;
-          // Show URL
           urlBox.style.display = 'block';
           imageUrlDisplay.textContent = url;
           setStatus(uploadStatus, '✅ Upload successful!', 'success');
@@ -281,7 +276,6 @@
           copyBtn.innerHTML = '✅ Copied!';
           setTimeout(() => { copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy URL'; }, 2500);
         }).catch(() => {
-          // Fallback
           const range = document.createRange();
           range.selectNode(imageUrlDisplay);
           window.getSelection().removeAllRanges();
@@ -293,7 +287,6 @@
       }
     });
 
-    // Load preview on page load
     loadPreview();
   })();
 </script>
