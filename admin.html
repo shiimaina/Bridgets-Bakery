@@ -45,7 +45,7 @@
       border-radius: 12px;
       border: 2px solid rgba(212, 175, 55, 0.3);
       overflow: hidden;
-      width: 180px;
+      width: 200px;
       text-align: center;
       padding-bottom: 8px;
     }
@@ -62,6 +62,44 @@
       word-break: break-word;
       min-height: 2.4em;
     }
+    .preview-item .desc-input-edit {
+      width: calc(100% - 16px);
+      margin: 6px 8px;
+      padding: 4px 8px;
+      background: #111;
+      border: 1px solid #D4AF37;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.8rem;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .preview-item .desc-input-edit:focus {
+      outline: 2px solid #D4AF37;
+    }
+    .preview-item .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin: 4px 0;
+    }
+    .preview-item .action-btn {
+      background: transparent;
+      border: none;
+      color: #a6977d;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      transition: 0.2s;
+    }
+    .preview-item .action-btn:hover {
+      background: rgba(212, 175, 55, 0.15);
+      color: #D4AF37;
+    }
+    .preview-item .action-btn.save-btn { color: #6bff6b; }
+    .preview-item .action-btn.save-btn:hover { background: rgba(107, 255, 107, 0.15); }
+    .preview-item .action-btn.cancel-btn { color: #ff6b6b; }
+    .preview-item .action-btn.cancel-btn:hover { background: rgba(255, 107, 107, 0.15); }
     .preview-item .delete-btn {
       position: absolute;
       top: 4px;
@@ -82,6 +120,29 @@
     }
     .preview-item .delete-btn:hover {
       background: #ff0000;
+      transform: scale(1.1);
+      opacity: 1;
+    }
+    .preview-item .edit-btn {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      background: rgba(212, 175, 55, 0.7);
+      color: #0B0B0B;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.3s;
+      opacity: 0.8;
+    }
+    .preview-item .edit-btn:hover {
+      background: #D4AF37;
       transform: scale(1.1);
       opacity: 1;
     }
@@ -146,7 +207,7 @@
       <i class="fas fa-images"></i> Recent Uploads
     </h3>
     <p style="color: #6a5f4e; font-size: 0.8rem; text-align: center; margin-bottom: 12px;">
-      Hover over an image and click the <span style="color: #ff6b6b;">🗑️</span> to delete it.
+      <span style="color: #D4AF37;">✏️</span> Edit description  ·  <span style="color: #ff6b6b;">🗑️</span> Delete image
     </p>
     <div id="previewGrid" class="preview-grid">
       <div class="preview-empty">No images uploaded yet.</div>
@@ -209,7 +270,7 @@
         const docRef = db.collection('gallery').doc('images');
         const doc = await docRef.get();
         if (doc.exists) {
-          const items = doc.data().urls || []; // array of {url, description}
+          const items = doc.data().urls || [];
           previewGrid.innerHTML = '';
           if (items.length === 0) {
             const empty = document.createElement('div');
@@ -217,29 +278,42 @@
             empty.textContent = 'No images uploaded yet.';
             previewGrid.appendChild(empty);
           } else {
-            items.forEach((item) => {
+            items.forEach((item, index) => {
               const url = typeof item === 'string' ? item : item.url;
               const description = typeof item === 'string' ? '' : (item.description || '');
               const div = document.createElement('div');
               div.className = 'preview-item';
+              div.dataset.url = url;
+              div.dataset.index = index;
               const img = document.createElement('img');
               img.src = url;
               img.alt = description || 'Gallery image';
               img.loading = 'lazy';
-              const descSpan = document.createElement('div');
-              descSpan.className = 'desc';
-              descSpan.textContent = description || '(no description)';
+              const descDiv = document.createElement('div');
+              descDiv.className = 'desc';
+              descDiv.textContent = description || '(no description)';
+              // Edit button (pencil)
+              const editBtn = document.createElement('button');
+              editBtn.className = 'edit-btn';
+              editBtn.innerHTML = '✏️';
+              editBtn.title = 'Edit description';
+              editBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                startEdit(div, url, description);
+              });
+              // Delete button (trash)
               const delBtn = document.createElement('button');
               delBtn.className = 'delete-btn';
               delBtn.innerHTML = '🗑️';
-              delBtn.setAttribute('data-url', url);
+              delBtn.title = 'Delete image';
               delBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
-                const urlToDelete = this.getAttribute('data-url');
+                const urlToDelete = this.parentElement.dataset.url;
                 deleteImage(urlToDelete);
               });
               div.appendChild(img);
-              div.appendChild(descSpan);
+              div.appendChild(descDiv);
+              div.appendChild(editBtn);
               div.appendChild(delBtn);
               previewGrid.appendChild(div);
             });
@@ -254,6 +328,94 @@
       }
     }
 
+    // --- Edit description logic ---
+    function startEdit(container, url, currentDesc) {
+      // Remove existing edit UI if any
+      const existingEdit = container.querySelector('.desc-edit-wrapper');
+      if (existingEdit) return;
+
+      const descDiv = container.querySelector('.desc');
+      const originalText = descDiv.textContent;
+      // Hide the description text
+      descDiv.style.display = 'none';
+
+      const editWrapper = document.createElement('div');
+      editWrapper.className = 'desc-edit-wrapper';
+      editWrapper.style.padding = '4px 8px';
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'desc-input-edit';
+      input.value = currentDesc || '';
+      input.placeholder = 'Enter description...';
+
+      const btnGroup = document.createElement('div');
+      btnGroup.className = 'action-buttons';
+
+      const saveBtn = document.createElement('button');
+      saveBtn.className = 'action-btn save-btn';
+      saveBtn.textContent = 'Save';
+      saveBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const newDesc = input.value.trim();
+        updateDescription(url, newDesc, container);
+      });
+
+      const cancelBtn = document.createElement('button');
+      cancelBtn.className = 'action-btn cancel-btn';
+      cancelBtn.textContent = 'Cancel';
+      cancelBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        cancelEdit(container);
+      });
+
+      btnGroup.appendChild(saveBtn);
+      btnGroup.appendChild(cancelBtn);
+      editWrapper.appendChild(input);
+      editWrapper.appendChild(btnGroup);
+      container.appendChild(editWrapper);
+      input.focus();
+    }
+
+    function cancelEdit(container) {
+      const editWrapper = container.querySelector('.desc-edit-wrapper');
+      if (editWrapper) editWrapper.remove();
+      const descDiv = container.querySelector('.desc');
+      if (descDiv) descDiv.style.display = 'block';
+    }
+
+    async function updateDescription(url, newDesc, container) {
+      if (newDesc === '') newDesc = '(no description)';
+      try {
+        const docRef = db.collection('gallery').doc('images');
+        const doc = await docRef.get();
+        if (doc.exists) {
+          let items = doc.data().urls || [];
+          // Find the item with matching URL and update its description
+          items = items.map(item => {
+            const itemUrl = typeof item === 'string' ? item : item.url;
+            if (itemUrl === url) {
+              if (typeof item === 'string') {
+                // Convert old string to object
+                return { url: item, description: newDesc };
+              } else {
+                // Update existing object
+                return { ...item, description: newDesc };
+              }
+            }
+            return item;
+          });
+          await docRef.update({ urls: items });
+          setStatus(uploadStatus, '✅ Description updated!', 'success');
+          // Reload preview to reflect changes
+          loadPreview();
+        }
+      } catch (err) {
+        console.error('Update description error:', err);
+        setStatus(uploadStatus, '❌ Update failed: ' + err.message, 'error');
+      }
+    }
+
     // --- Delete image ---
     async function deleteImage(url) {
       if (!confirm('Are you sure you want to delete this image from the gallery?')) return;
@@ -261,7 +423,7 @@
         const docRef = db.collection('gallery').doc('images');
         const doc = await docRef.get();
         if (doc.exists) {
-          const items = doc.data().urls || [];
+          let items = doc.data().urls || [];
           const newItems = items.filter(item => (typeof item === 'string' ? item : item.url) !== url);
           await docRef.update({ urls: newItems });
           setStatus(uploadStatus, '✅ Image deleted from gallery!', 'success');
@@ -370,7 +532,6 @@
         if (doc.exists) {
           items = doc.data().urls || [];
         }
-        // Add new item as object with url and description
         items.push({ url: url, description: description || '' });
         await docRef.set({ urls: items });
         setStatus(uploadStatus, '✅ Image added to gallery!', 'success');
