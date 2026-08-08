@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bakery Admin – Upload</title>
+  <title>Bakery Admin – Upload Gallery</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
@@ -22,6 +22,7 @@
     .btn-primary:hover { background: #b8962e; }
     .btn-upload { width: 100%; padding: 14px; background: #D4AF37; color: #0B0B0B; border: none; border-radius: 10px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; }
     .btn-upload:hover { background: #b8962e; }
+    .btn-upload:disabled { opacity: 0.5; cursor: not-allowed; }
     .status-msg { text-align: center; font-size: 0.85rem; margin-top: 12px; min-height: 1.6em; }
     .status-msg.error { color: #ff6b6b; }
     .status-msg.success { color: #6bff6b; }
@@ -29,19 +30,20 @@
     .hidden { display: none !important; }
     .divider { border: none; border-top: 1px solid rgba(212, 175, 55, 0.15); margin: 28px 0 24px; }
     .preview-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; justify-content: center; }
-    .preview-grid img { max-width: 120px; max-height: 120px; border-radius: 12px; border: 2px solid rgba(212, 175, 55, 0.3); background: #1a1a1a; }
+    .preview-grid img { max-width: 120px; max-height: 120px; border-radius: 12px; border: 2px solid rgba(212, 175, 55, 0.3); background: #1a1a1a; object-fit: cover; }
     .preview-empty { color: #6a5f4e; text-align: center; width: 100%; padding: 12px 0; }
     .back-link { display: block; text-align: center; margin-top: 24px; color: #6a5f4e; text-decoration: none; font-size: 0.85rem; }
     .back-link:hover { color: #D4AF37; }
     .file-input-wrapper { position: relative; margin: 12px 0; }
-    .file-input-wrapper input[type="file"] { width: 100%; padding: 12px; background: #1e1e1e; border: 1px dashed rgba(212, 175, 55, 0.3); border-radius: 10px; color: #c4b8a2; font-family: 'Montserrat', sans-serif; }
+    .file-input-wrapper input[type="file"] { width: 100%; padding: 12px; background: #1e1e1e; border: 1px dashed rgba(212, 175, 55, 0.3); border-radius: 10px; color: #c4b8a2; font-family: 'Montserrat', sans-serif; cursor: pointer; }
     .file-input-wrapper input[type="file"]::file-selector-button { background: #D4AF37; color: #0B0B0B; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-right: 12px; }
     .upload-progress { background: #1e1e1e; border-radius: 10px; height: 8px; margin: 12px 0; overflow: hidden; display: none; }
     .upload-progress .bar { width: 0%; height: 100%; background: #D4AF37; transition: width 0.3s; }
-    .url-box { background: #1e1e1e; border: 1px solid #D4AF37; border-radius: 10px; padding: 12px; margin-top: 12px; word-break: break-all; display: none; }
-    .url-box code { color: #D4AF37; font-size: 0.85rem; }
-    .copy-btn { background: transparent; border: 1px solid #D4AF37; color: #D4AF37; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; margin-top: 8px; }
+    .url-box { background: #1e1e1e; border: 1px solid #D4AF37; border-radius: 10px; padding: 12px; margin-top: 12px; display: none; }
+    .url-box code { color: #D4AF37; font-size: 0.85rem; word-break: break-all; display: block; }
+    .copy-btn { background: transparent; border: 1px solid #D4AF37; color: #D4AF37; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; margin-top: 8px; transition: 0.3s; }
     .copy-btn:hover { background: #D4AF37; color: #0B0B0B; }
+    .url-label { color: #a6977d; font-size: 0.8rem; margin-bottom: 4px; }
   </style>
 </head>
 <body>
@@ -70,7 +72,7 @@
   <!-- Upload Section -->
   <div id="uploadSection" class="hidden">
     <p style="color: #a6977d; font-size: 0.95rem; text-align: center; margin-bottom: 16px;">
-      Select an image to upload. After upload, copy the URL and add it to <code>gallery.json</code>.
+      Select an image to upload. After upload, copy the URL and add it to <code style="color:#D4AF37;">gallery.json</code>.
     </p>
 
     <div class="file-input-wrapper">
@@ -81,15 +83,17 @@
       <div class="bar" id="progressBar"></div>
     </div>
 
-    <button class="btn-upload" id="uploadBtn"><i class="fas fa-cloud-upload-alt"></i> Upload</button>
+    <button class="btn-upload" id="uploadBtn"><i class="fas fa-cloud-upload-alt"></i> Upload to Gallery</button>
 
     <div id="uploadStatus" class="status-msg info"></div>
 
     <div class="url-box" id="urlBox">
-      <p style="color: #a6977d; font-size: 0.8rem;">Uploaded URL:</p>
+      <div class="url-label">✅ Upload successful! Copy this URL:</div>
       <code id="imageUrlDisplay"></code>
-      <br />
       <button class="copy-btn" id="copyUrlBtn"><i class="fas fa-copy"></i> Copy URL</button>
+      <p style="color: #a6977d; font-size: 0.75rem; margin-top: 8px;">
+        📌 Then open <code style="color:#D4AF37;">gallery.json</code> in your repo and add this URL to the <code style="color:#D4AF37;">"images"</code> array.
+      </p>
     </div>
 
     <hr class="divider" />
@@ -107,14 +111,16 @@
 
 <script>
   (function() {
+    'use strict';
+
     // ============================================================
-    //  CONFIGURATION – EDIT THESE TO MATCH YOUR SETUP
+    //  CONFIGURATION – USING YOUR EXACT PRESET
     // ============================================================
-    // 🔁 Your Cloudinary cloud name – check your dashboard!
-    const CLOUD_NAME = 'dwitbu0d';   // CHANGE THIS if different
-    // The unsigned upload preset you created
-    const UPLOAD_PRESET = 'bakery_unsigned';
-    // Admin password – change this to your own
+    // Your Cloudinary cloud name
+    const CLOUD_NAME = 'dwitbu0d';
+    // Your upload preset name WITH apostrophe – use double quotes
+    const UPLOAD_PRESET = "bridget'sbakery";
+    // Your admin password – change this!
     const ADMIN_PASSWORD = 'BridgetBakery2026!';
     // ============================================================
 
@@ -207,18 +213,24 @@
         return;
       }
 
-      // Show progress
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        setStatus(uploadStatus, 'Please select a valid image file (JPEG, PNG, etc.).', 'error');
+        return;
+      }
+
+      uploadBtn.disabled = true;
       progressContainer.style.display = 'block';
       progressBar.style.width = '0%';
       setStatus(uploadStatus, '⏳ Uploading...', 'info');
+      urlBox.style.display = 'none';
 
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', UPLOAD_PRESET);
-      // Optional: add a folder
-      // formData.append('folder', 'bakery_gallery');
+      // Optional: add folder to organise
+      // formData.append('folder', 'bridgetsbakery');
 
-      // Use XHR to track progress
       const xhr = new XMLHttpRequest();
       xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`);
 
@@ -230,6 +242,7 @@
       });
 
       xhr.onload = function() {
+        uploadBtn.disabled = false;
         if (xhr.status === 200) {
           const data = JSON.parse(xhr.responseText);
           const url = data.secure_url;
@@ -237,13 +250,10 @@
           urlBox.style.display = 'block';
           imageUrlDisplay.textContent = url;
           setStatus(uploadStatus, '✅ Upload successful!', 'success');
-          // Add to preview
           addToPreview(url);
-          // Clear file input
           fileInput.value = '';
           progressContainer.style.display = 'none';
         } else {
-          // Try to get error message
           let errorMsg = 'Unknown error';
           try {
             const errData = JSON.parse(xhr.responseText);
@@ -255,6 +265,7 @@
       };
 
       xhr.onerror = function() {
+        uploadBtn.disabled = false;
         setStatus(uploadStatus, '❌ Network error. Check your connection.', 'error');
         progressContainer.style.display = 'none';
       };
@@ -267,8 +278,17 @@
       const url = imageUrlDisplay.textContent;
       if (url) {
         navigator.clipboard.writeText(url).then(() => {
-          copyBtn.textContent = '✅ Copied!';
-          setTimeout(() => { copyBtn.textContent = '<i class="fas fa-copy"></i> Copy URL'; }, 2000);
+          copyBtn.innerHTML = '✅ Copied!';
+          setTimeout(() => { copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy URL'; }, 2500);
+        }).catch(() => {
+          // Fallback
+          const range = document.createRange();
+          range.selectNode(imageUrlDisplay);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+          document.execCommand('copy');
+          copyBtn.innerHTML = '✅ Copied!';
+          setTimeout(() => { copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy URL'; }, 2500);
         });
       }
     });
