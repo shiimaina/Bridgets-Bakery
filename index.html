@@ -52,8 +52,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
     <!-- ========== FIREBASE SDK ========== -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js" defer></script>
 
     <style>
         /* ===== GOLD & BLACK THEME ===== */
@@ -305,7 +305,7 @@
         }
         @keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .hero-image { animation: floatY 6s ease-in-out infinite; }
-        .hero-badge, .hero-content h1, .hero-description, .hero-content > a {
+        .hero-badge, .hero-content h1, .hero-description, .hero-content > div {
             opacity: 0;
             transform: translateY(16px);
             animation: heroIn 0.7s var(--ease) forwards;
@@ -313,7 +313,7 @@
         .hero-badge { animation-delay: 0.05s; }
         .hero-content h1 { animation-delay: 0.15s; }
         .hero-description { animation-delay: 0.28s; }
-        .hero-content > a { animation-delay: 0.4s; }
+        .hero-content > div { animation-delay: 0.4s; }
         @keyframes heroIn { to { opacity: 1; transform: translateY(0); } }
 
         /* SECTIONS – hide/show */
@@ -324,6 +324,7 @@
         .page-section.hidden {
             display: none;
         }
+        .hidden { display: none !important; }
 
         /* REVEAL */
         .reveal {
@@ -523,17 +524,22 @@
         }
         .float-call:hover { background: var(--gold); box-shadow: 0 4px 40px rgba(212, 175, 55, 0.4); color: #000; }
 
-        /* GALLERY GRID */
+        /* GALLERY GRID – now supports captions */
         .gallery-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 24px;
+            gap: 30px;
             justify-content: center;
             padding: 20px 0 40px;
         }
-        .gallery-grid img {
+        .gallery-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             max-width: 240px;
-            max-height: 240px;
+            width: 100%;
+        }
+        .gallery-item img {
             width: 100%;
             height: 240px;
             object-fit: cover;
@@ -542,9 +548,17 @@
             transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
             background: #111;
         }
-        .gallery-grid img:hover {
+        .gallery-item img:hover {
             transform: scale(1.05);
             box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3);
+        }
+        .gallery-caption {
+            color: #b5aa95;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            text-align: center;
+            max-width: 240px;
+            line-height: 1.4;
         }
         .gallery-empty {
             color: #a6977d;
@@ -553,6 +567,65 @@
             font-size: 1.1rem;
             padding: 40px 0;
         }
+        .product-image, .gallery-item img { cursor: zoom-in; }
+
+        /* SKELETON SHIMMER */
+        .skeleton-card {
+            width: 240px;
+            height: 240px;
+            border-radius: 16px;
+            background: linear-gradient(100deg, #151515 30%, #1f1a0e 50%, #151515 70%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s ease-in-out infinite;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        @media (max-width: 480px) { .skeleton-card { width: 160px; height: 160px; } }
+
+        /* LIGHTBOX */
+        .lightbox-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 5, 5, 0.92);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            padding: 24px;
+        }
+        .lightbox-overlay.open { opacity: 1; pointer-events: auto; }
+        .lightbox-overlay img {
+            max-width: min(90vw, 700px);
+            max-height: 85vh;
+            border-radius: 16px;
+            border: 2px solid var(--gold);
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
+            transform: scale(0.96);
+            transition: transform 0.25s ease;
+        }
+        .lightbox-overlay.open img { transform: scale(1); }
+        .lightbox-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(26, 26, 26, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            color: var(--gold);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .lightbox-close:hover { background: var(--gold); color: #0B0B0B; }
 
         /* FOOTER */
         footer {
@@ -659,7 +732,7 @@
             .hero::before, .hero::after { font-size: 3rem; opacity: 0.3; letter-spacing: 30px; }
             .products-grid { grid-template-columns: 1fr 1fr; }
             .product-image { height: 180px; object-fit: cover; }
-            .gallery-grid img { height: 200px; }
+            .gallery-item img { height: 200px; }
         }
         @media (max-width: 480px) {
             .hero-content h1 { font-size: 2rem; }
@@ -667,7 +740,7 @@
             .product-card { padding: 16px 14px 20px; }
             .products-grid { grid-template-columns: 1fr; }
             .product-image { height: auto; aspect-ratio: 4/3; object-fit: contain; max-height: 280px; border-radius: 16px 6px 16px 6px; }
-            .gallery-grid img { height: 160px; max-width: 160px; }
+            .gallery-item img { height: 160px; }
         }
     </style>
 </head>
@@ -703,9 +776,14 @@
                     Artisanal baked goods crafted with passion and the finest ingredients.
                     From our kitchen to yours — pure indulgence.
                 </p>
-                <a href="#" data-section="products" style="display: inline-block; background: transparent; color: var(--gold); padding: 14px 40px; border-radius: 40px; font-weight: 700; text-decoration: none; transition: 0.3s; border: 2px solid var(--gold); letter-spacing: 1.5px; box-shadow: 0 0 30px rgba(212, 175, 55, 0.05);">
-                    <i class="fas fa-cupcake"></i> Explore treats
-                </a>
+                <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: inherit;">
+                    <a href="#" data-section="products" style="display: inline-flex; align-items: center; gap: 10px; background: transparent; color: var(--gold); padding: 14px 36px; border-radius: 40px; font-weight: 700; text-decoration: none; transition: 0.3s; border: 2px solid var(--gold); letter-spacing: 1.5px; box-shadow: 0 0 30px rgba(212, 175, 55, 0.05);">
+                        <i class="fas fa-cake-candles"></i> Explore treats
+                    </a>
+                    <a href="#" onclick="whatsappInquiry('general')" style="display: inline-flex; align-items: center; gap: 10px; background: var(--whatsapp-green); color: #fff; padding: 14px 32px; border-radius: 40px; font-weight: 700; text-decoration: none; transition: 0.3s; border: 2px solid var(--whatsapp-green); letter-spacing: 1px;" onmouseover="this.style.background='transparent';this.style.color='#25D366'" onmouseout="this.style.background='#25D366';this.style.color='#fff'">
+                        <i class="fab fa-whatsapp"></i> Order Now
+                    </a>
+                </div>
             </div>
             <div class="hero-image">
                 <img src="https://i.ibb.co/N8mfhBP/bridgets-log.png" alt="Pure Golden Bliss - Chef Briget Logo" />
@@ -783,7 +861,7 @@
     </div>
 
     <!-- ========== ABOUT SECTION ========== -->
-    <div class="page-section hidden" id="section-about">
+    <div class="page-section" id="section-about">
         <div class="container">
             <div class="reveal" style="margin: 70px 0; background: var(--black-soft); border-radius: 40px; padding: 48px 32px; border: 1px solid rgba(212, 175, 55, 0.10); box-shadow: var(--shadow-gold);">
                 <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 40px;">
@@ -815,7 +893,7 @@
     </div>
 
     <!-- ========== CONTACT SECTION ========== -->
-    <div class="page-section hidden" id="section-contact">
+    <div class="page-section" id="section-contact">
         <div class="container">
             <div style="margin: 60px 0; text-align: center;">
                 <h2 class="section-title">Get in <span>Touch</span></h2>
@@ -853,7 +931,7 @@
                     <h4>Opening Hours</h4>
                     <p>Mon – Sat: 8:00 am – 8:00 pm</p>
                     <p>Sunday: 9:00 am – 4:00 pm</p>
-                    <p style="color: var(--gold);"><i class="fas fa-cupcake"></i> Fresh daily</p>
+                    <p style="color: var(--gold);"><i class="fas fa-cookie-bite"></i> Fresh daily</p>
                 </div>
                 <div class="footer-col">
                     <h4>Connect with us</h4>
@@ -888,6 +966,12 @@
         </div>
     </footer>
 
+    <!-- ========== LIGHTBOX ========== -->
+    <div class="lightbox-overlay" id="lightboxOverlay" role="dialog" aria-modal="true" aria-label="Enlarged image">
+        <button class="lightbox-close" id="lightboxClose" aria-label="Close enlarged image"><i class="fas fa-times"></i></button>
+        <img id="lightboxImg" src="" alt="" />
+    </div>
+
     <!-- ========== FLOATING BUTTONS ========== -->
     <div class="float-buttons">
         <button class="float-btn float-top" id="backToTop" aria-label="Back to top">
@@ -915,8 +999,14 @@
             messagingSenderId: "51437476915",
             appId: "1:51437476915:web:069bce9c3bdddff4001746"
         };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        // Firebase SDK scripts load with `defer`, so init happens once the
+        // DOM (and by spec, all deferred scripts) are ready — avoids a
+        // "firebase is not defined" race on slower connections.
+        let db;
+        function initFirebase() {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+        }
         // ============================================================
 
         const PHONE_NUMBER = '254790499261';
@@ -938,6 +1028,36 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+            initFirebase();
+
+            // ===== LIGHTBOX (click-to-zoom) =====
+            const lightboxOverlay = document.getElementById('lightboxOverlay');
+            const lightboxImg = document.getElementById('lightboxImg');
+            const lightboxClose = document.getElementById('lightboxClose');
+
+            function openLightbox(src, alt) {
+                lightboxImg.src = src;
+                lightboxImg.alt = alt || 'Enlarged image';
+                lightboxOverlay.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+            function closeLightbox() {
+                lightboxOverlay.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+            lightboxClose.addEventListener('click', closeLightbox);
+            lightboxOverlay.addEventListener('click', function(e) {
+                if (e.target === lightboxOverlay) closeLightbox();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeLightbox();
+            });
+            // Delegate clicks so it works for gallery images loaded later too
+            document.addEventListener('click', function(e) {
+                const img = e.target.closest('.gallery-item img, .product-image');
+                if (img) openLightbox(img.src, img.alt);
+            });
+
             // ===== FLOATING WHATSAPP BUTTON =====
             const floatBtn = document.getElementById('floatWaBtn');
             if (floatBtn) {
@@ -975,44 +1095,50 @@
                 });
             });
 
-            // ===== NAVIGATION: SHOW/HIDE SECTIONS =====
+            // ===== NAVIGATION: CONTINUOUS SCROLL + GALLERY ALONE =====
             const navLinks = document.querySelectorAll('.nav-links a[data-section]');
-            const sections = {
-                home: document.getElementById('section-products'), // home shows products
+            const gallerySection = document.getElementById('section-gallery');
+            const scrollTargets = {
+                home: document.querySelector('.hero'),
                 products: document.getElementById('section-products'),
-                gallery: document.getElementById('section-gallery'),
                 about: document.getElementById('section-about'),
                 contact: document.getElementById('section-contact')
             };
+            const mainSections = [scrollTargets.products, scrollTargets.about, scrollTargets.contact];
 
-            // Initially show home (products)
-            let currentSection = 'home';
-            for (const [key, el] of Object.entries(sections)) {
-                if (el) el.classList.toggle('hidden', key !== 'home');
+            function showGalleryAlone() {
+                mainSections.forEach(el => el && el.classList.add('hidden'));
+                document.querySelector('.hero')?.classList.add('hidden');
+                if (gallerySection) gallerySection.classList.remove('hidden');
+                loadGalleryFromFirestore();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
 
-            function switchSection(sectionId) {
-                // hide all
-                for (const [key, el] of Object.entries(sections)) {
-                    if (el) el.classList.add('hidden');
+            function showMainScroll(scrollToKey) {
+                if (gallerySection) gallerySection.classList.add('hidden');
+                mainSections.forEach(el => el && el.classList.remove('hidden'));
+                document.querySelector('.hero')?.classList.remove('hidden');
+                const target = scrollTargets[scrollToKey];
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
-                // show selected
-                const target = sections[sectionId];
-                if (target) target.classList.remove('hidden');
-                currentSection = sectionId;
+            }
 
-                // update nav active
+            function setActiveNav(sectionId) {
                 navLinks.forEach(link => {
                     link.classList.toggle('active', link.dataset.section === sectionId);
                 });
+            }
 
-                // if gallery, load images from Firestore
+            function switchSection(sectionId) {
                 if (sectionId === 'gallery') {
-                    loadGalleryFromFirestore();
+                    showGalleryAlone();
+                } else {
+                    showMainScroll(sectionId);
                 }
-
-                // scroll to top
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setActiveNav(sectionId);
             }
 
             // Nav click handlers
@@ -1024,41 +1150,64 @@
                 });
             });
 
-            // Explore treats button
+            // Scroll-spy: highlight the right nav item while scrolling the main page
+            const spyObserver = new IntersectionObserver((entries) => {
+                if (!gallerySection.classList.contains('hidden')) return; // gallery view active, skip
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const match = Object.entries(scrollTargets).find(([, el]) => el === entry.target);
+                        if (match) setActiveNav(match[0]);
+                    }
+                });
+            }, { rootMargin: '-40% 0px -50% 0px' });
+            Object.values(scrollTargets).forEach(el => el && spyObserver.observe(el));
+
+            // Explore treats / Order Now buttons scroll within the page
             document.querySelector('.hero-content a[data-section="products"]')?.addEventListener('click', function(e) {
                 e.preventDefault();
-                switchSection('products');
+                showMainScroll('products');
+                setActiveNav('products');
             });
 
-            // ===== GALLERY LOAD FROM FIRESTORE =====
+            // ===== GALLERY LOAD FROM FIRESTORE (with descriptions) =====
             let galleryLoaded = false;
 
             async function loadGalleryFromFirestore() {
                 const grid = document.getElementById('galleryGrid');
                 if (!grid) return;
-                // If already loaded, don't reload
                 if (galleryLoaded) return;
-                grid.innerHTML = '<div class="gallery-empty">Loading gallery...</div>';
+                grid.innerHTML = Array.from({ length: 6 }).map(() => '<div class="skeleton-card"></div>').join('');
 
                 try {
                     const docRef = db.collection('gallery').doc('images');
                     const doc = await docRef.get();
                     if (doc.exists) {
-                        const urls = doc.data().urls || [];
+                        const items = doc.data().urls || [];
                         grid.innerHTML = '';
-                        if (urls.length === 0) {
+                        if (items.length === 0) {
                             grid.innerHTML = '<div class="gallery-empty">No images yet. Check back soon!</div>';
                         } else {
-                            urls.forEach(url => {
+                            items.forEach(item => {
+                                const url = typeof item === 'string' ? item : item.url;
+                                const description = (typeof item === 'string') ? '' : (item.description || '');
+                                const wrapper = document.createElement('div');
+                                wrapper.className = 'gallery-item';
                                 const img = document.createElement('img');
                                 img.src = url;
-                                img.alt = 'Bakery item';
+                                img.alt = description || 'Bakery item';
                                 img.loading = 'lazy';
-                                grid.appendChild(img);
+                                wrapper.appendChild(img);
+                                if (description) {
+                                    const caption = document.createElement('p');
+                                    caption.className = 'gallery-caption';
+                                    caption.textContent = description;
+                                    wrapper.appendChild(caption);
+                                }
+                                grid.appendChild(wrapper);
                             });
                         }
                     } else {
-                        // Document doesn't exist – create it
+                        // Create the document if it doesn't exist
                         await db.collection('gallery').doc('images').set({ urls: [] });
                         grid.innerHTML = '<div class="gallery-empty">No images yet. Check back soon!</div>';
                     }
