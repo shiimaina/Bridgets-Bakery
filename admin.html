@@ -6,6 +6,9 @@
   <title>Bakery Admin – Upload Gallery</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <!-- Firebase SDK (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #0B0B0B; color: #F8F6F0; font-family: 'Montserrat', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
@@ -52,7 +55,7 @@
 
   <span class="admin-icon">🧁</span>
   <h1>Gallery Admin</h1>
-  <p class="subtitle">Upload new images to your bakery gallery</p>
+  <p class="subtitle">Upload new images – they'll appear instantly on your bakery gallery</p>
 
   <!-- Login Section -->
   <div id="loginSection">
@@ -72,7 +75,7 @@
   <!-- Upload Section -->
   <div id="uploadSection" class="hidden">
     <p style="color: #a6977d; font-size: 0.95rem; text-align: center; margin-bottom: 16px;">
-      Select an image to upload. After upload, copy the URL and add it to <code style="color:#D4AF37;">gallery.json</code>.
+      Select an image to upload. After upload, it will be added to the gallery automatically.
     </p>
 
     <div class="file-input-wrapper">
@@ -86,15 +89,6 @@
     <button class="btn-upload" id="uploadBtn"><i class="fas fa-cloud-upload-alt"></i> Upload to Gallery</button>
 
     <div id="uploadStatus" class="status-msg info"></div>
-
-    <div class="url-box" id="urlBox">
-      <div class="url-label">✅ Upload successful! Copy this URL:</div>
-      <code id="imageUrlDisplay"></code>
-      <button class="copy-btn" id="copyUrlBtn"><i class="fas fa-copy"></i> Copy URL</button>
-      <p style="color: #a6977d; font-size: 0.75rem; margin-top: 8px;">
-        📌 Then open <code style="color:#D4AF37;">gallery.json</code> in your repo and add this URL to the <code style="color:#D4AF37;">"images"</code> array.
-      </p>
-    </div>
 
     <hr class="divider" />
 
@@ -110,16 +104,28 @@
 </div>
 
 <script>
+  // ============================================================
+  //  FIREBASE CONFIG – YOUR CONFIGURATION
+  // ============================================================
+  const firebaseConfig = {
+    apiKey: "AIzaSyC80QmqF9l03rzPOfCo9P8BEpj67B5_hvQ",
+    authDomain: "bridgets-bakery-gallery.firebaseapp.com",
+    databaseURL: "https://bridgets-bakery-gallery-default-rtdb.firebaseio.com",
+    projectId: "bridgets-bakery-gallery",
+    storageBucket: "bridgets-bakery-gallery.firebasestorage.app",
+    messagingSenderId: "51437476915",
+    appId: "1:51437476915:web:069bce9c3bdddff4001746"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  // ============================================================
+
   (function() {
     'use strict';
 
-    // ============================================================
-    //  CONFIGURATION – USING YOUR NEW UNSIGNED PRESET
-    // ============================================================
-    const CLOUD_NAME = 'dwtlbu0d';                // Your cloud name
-    const UPLOAD_PRESET = 'bakery_upload';         // Your new unsigned preset
-    const ADMIN_PASSWORD = 'BridgetBakery2026!';   // Change this to your own password
-    // ============================================================
+    const CLOUD_NAME = 'dwtlbu0d';
+    const UPLOAD_PRESET = 'bakery_upload';
+    const ADMIN_PASSWORD = 'BridgetBakery2026!'; // Change this!
 
     const loginSection = document.getElementById('loginSection');
     const uploadSection = document.getElementById('uploadSection');
@@ -133,9 +139,6 @@
     const uploadStatus = document.getElementById('uploadStatus');
     const progressContainer = document.getElementById('progressContainer');
     const progressBar = document.getElementById('progressBar');
-    const urlBox = document.getElementById('urlBox');
-    const imageUrlDisplay = document.getElementById('imageUrlDisplay');
-    const copyBtn = document.getElementById('copyUrlBtn');
     const previewGrid = document.getElementById('previewGrid');
 
     // --- Password toggle ---
@@ -146,33 +149,37 @@
       toggleIcon.className = passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye';
     });
 
-    // --- Load preview from localStorage ---
-    function loadPreview() {
-      const stored = JSON.parse(localStorage.getItem('bakeryGallery') || '[]');
-      previewGrid.innerHTML = '';
-      if (stored.length === 0) {
-        const empty = document.createElement('div');
-        empty.className = 'preview-empty';
-        empty.textContent = 'No images uploaded yet.';
-        previewGrid.appendChild(empty);
-        return;
+    // --- Load preview from Firestore ---
+    async function loadPreview() {
+      try {
+        const docRef = db.collection('gallery').doc('images');
+        const doc = await docRef.get();
+        if (doc.exists) {
+          const urls = doc.data().urls || [];
+          previewGrid.innerHTML = '';
+          if (urls.length === 0) {
+            const empty = document.createElement('div');
+            empty.className = 'preview-empty';
+            empty.textContent = 'No images uploaded yet.';
+            previewGrid.appendChild(empty);
+          } else {
+            urls.forEach(url => {
+              const img = document.createElement('img');
+              img.src = url;
+              img.alt = 'Uploaded bakery item';
+              img.loading = 'lazy';
+              previewGrid.appendChild(img);
+            });
+          }
+        } else {
+          // Create the document if it doesn't exist
+          await db.collection('gallery').doc('images').set({ urls: [] });
+          loadPreview();
+        }
+      } catch (err) {
+        console.error('Error loading preview:', err);
+        previewGrid.innerHTML = '<div class="preview-empty">Error loading gallery.</div>';
       }
-      stored.forEach(url => {
-        const img = document.createElement('img');
-        img.src = url;
-        img.alt = 'Uploaded bakery item';
-        img.loading = 'lazy';
-        previewGrid.appendChild(img);
-      });
-    }
-
-    function addToPreview(url) {
-      const stored = JSON.parse(localStorage.getItem('bakeryGallery') || '[]');
-      if (!stored.includes(url)) {
-        stored.push(url);
-        localStorage.setItem('bakeryGallery', JSON.stringify(stored));
-      }
-      loadPreview();
     }
 
     // --- Login ---
@@ -218,14 +225,11 @@
       uploadBtn.disabled = true;
       progressContainer.style.display = 'block';
       progressBar.style.width = '0%';
-      setStatus(uploadStatus, '⏳ Uploading...', 'info');
-      urlBox.style.display = 'none';
+      setStatus(uploadStatus, '⏳ Uploading to Cloudinary...', 'info');
 
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', UPLOAD_PRESET);
-      // Optional: add a folder if you want to organize
-      // formData.append('folder', 'bakery_gallery');
 
       const xhr = new XMLHttpRequest();
       xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`);
@@ -238,23 +242,19 @@
       });
 
       xhr.onload = function() {
-        uploadBtn.disabled = false;
         if (xhr.status === 200) {
           const data = JSON.parse(xhr.responseText);
           const url = data.secure_url;
-          urlBox.style.display = 'block';
-          imageUrlDisplay.textContent = url;
-          setStatus(uploadStatus, '✅ Upload successful!', 'success');
-          addToPreview(url);
-          fileInput.value = '';
-          progressContainer.style.display = 'none';
+          setStatus(uploadStatus, '✅ Uploaded to Cloudinary! Saving to gallery...', 'info');
+          saveToFirestore(url);
         } else {
           let errorMsg = 'Unknown error';
           try {
             const errData = JSON.parse(xhr.responseText);
             errorMsg = errData.error?.message || errorMsg;
           } catch (e) {}
-          setStatus(uploadStatus, '❌ Upload failed: ' + errorMsg, 'error');
+          setStatus(uploadStatus, '❌ Upload to Cloudinary failed: ' + errorMsg, 'error');
+          uploadBtn.disabled = false;
           progressContainer.style.display = 'none';
         }
       };
@@ -268,24 +268,40 @@
       xhr.send(formData);
     });
 
-    // --- Copy URL ---
-    copyBtn.addEventListener('click', function() {
-      const url = imageUrlDisplay.textContent;
-      if (url) {
-        navigator.clipboard.writeText(url).then(() => {
-          copyBtn.innerHTML = '✅ Copied!';
-          setTimeout(() => { copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy URL'; }, 2500);
-        }).catch(() => {
-          const range = document.createRange();
-          range.selectNode(imageUrlDisplay);
-          window.getSelection().removeAllRanges();
-          window.getSelection().addRange(range);
-          document.execCommand('copy');
-          copyBtn.innerHTML = '✅ Copied!';
-          setTimeout(() => { copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy URL'; }, 2500);
+    // --- Save URL to Firestore ---
+    async function saveToFirestore(url) {
+      try {
+        const docRef = db.collection('gallery').doc('images');
+        await docRef.update({
+          urls: firebase.firestore.FieldValue.arrayUnion(url)
         });
+        setStatus(uploadStatus, '✅ Image added to gallery!', 'success');
+        uploadBtn.disabled = false;
+        progressContainer.style.display = 'none';
+        fileInput.value = '';
+        loadPreview();
+      } catch (err) {
+        console.error('Error saving to Firestore:', err);
+        if (err.message && err.message.includes('document does not exist')) {
+          try {
+            await db.collection('gallery').doc('images').set({ urls: [url] });
+            setStatus(uploadStatus, '✅ Image added to gallery!', 'success');
+            uploadBtn.disabled = false;
+            progressContainer.style.display = 'none';
+            fileInput.value = '';
+            loadPreview();
+          } catch (err2) {
+            setStatus(uploadStatus, '❌ Failed to save to gallery: ' + err2.message, 'error');
+            uploadBtn.disabled = false;
+            progressContainer.style.display = 'none';
+          }
+        } else {
+          setStatus(uploadStatus, '❌ Failed to save to gallery: ' + err.message, 'error');
+          uploadBtn.disabled = false;
+          progressContainer.style.display = 'none';
+        }
       }
-    });
+    }
 
     loadPreview();
   })();
