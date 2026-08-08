@@ -35,7 +35,7 @@
     .preview-grid {
       display: flex;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 20px;
       margin-top: 12px;
       justify-content: center;
     }
@@ -45,14 +45,22 @@
       border-radius: 12px;
       border: 2px solid rgba(212, 175, 55, 0.3);
       overflow: hidden;
-      width: 120px;
-      height: 120px;
+      width: 180px;
+      text-align: center;
+      padding-bottom: 8px;
     }
     .preview-item img {
       width: 100%;
-      height: 100%;
+      height: 150px;
       object-fit: cover;
       display: block;
+    }
+    .preview-item .desc {
+      color: #c4b8a2;
+      font-size: 0.8rem;
+      padding: 6px 8px;
+      word-break: break-word;
+      min-height: 2.4em;
     }
     .preview-item .delete-btn {
       position: absolute;
@@ -85,6 +93,9 @@
     .file-input-wrapper input[type="file"]::file-selector-button { background: #D4AF37; color: #0B0B0B; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-right: 12px; }
     .upload-progress { background: #1e1e1e; border-radius: 10px; height: 8px; margin: 12px 0; overflow: hidden; display: none; }
     .upload-progress .bar { width: 0%; height: 100%; background: #D4AF37; transition: width 0.3s; }
+    .desc-input { width: 100%; padding: 10px; background: #1e1e1e; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 10px; color: #F8F6F0; font-family: 'Montserrat', sans-serif; margin-top: 8px; }
+    .desc-input:focus { outline: 2px solid #D4AF37; }
+    .desc-input::placeholder { color: #6a5f4e; }
   </style>
 </head>
 <body>
@@ -113,12 +124,13 @@
   <!-- Upload Section -->
   <div id="uploadSection" class="hidden">
     <p style="color: #a6977d; font-size: 0.95rem; text-align: center; margin-bottom: 16px;">
-      Select an image to upload. After upload, it will be added to the gallery.
+      Select an image, add a description (optional), and upload.
     </p>
 
     <div class="file-input-wrapper">
       <input type="file" id="fileInput" accept="image/*" />
     </div>
+    <input type="text" id="descInput" class="desc-input" placeholder="Image description (optional)" />
 
     <div class="upload-progress" id="progressContainer">
       <div class="bar" id="progressBar"></div>
@@ -176,6 +188,7 @@
     const loginBtn = document.getElementById('loginBtn');
     const loginStatus = document.getElementById('loginStatus');
     const fileInput = document.getElementById('fileInput');
+    const descInput = document.getElementById('descInput');
     const uploadBtn = document.getElementById('uploadBtn');
     const uploadStatus = document.getElementById('uploadStatus');
     const progressContainer = document.getElementById('progressContainer');
@@ -196,38 +209,42 @@
         const docRef = db.collection('gallery').doc('images');
         const doc = await docRef.get();
         if (doc.exists) {
-          const urls = doc.data().urls || [];
+          const items = doc.data().urls || []; // array of {url, description}
           previewGrid.innerHTML = '';
-          if (urls.length === 0) {
+          if (items.length === 0) {
             const empty = document.createElement('div');
             empty.className = 'preview-empty';
             empty.textContent = 'No images uploaded yet.';
             previewGrid.appendChild(empty);
           } else {
-            urls.forEach((url, index) => {
-              const item = document.createElement('div');
-              item.className = 'preview-item';
+            items.forEach((item) => {
+              const url = typeof item === 'string' ? item : item.url;
+              const description = typeof item === 'string' ? '' : (item.description || '');
+              const div = document.createElement('div');
+              div.className = 'preview-item';
               const img = document.createElement('img');
               img.src = url;
-              img.alt = 'Gallery image ' + (index + 1);
+              img.alt = description || 'Gallery image';
               img.loading = 'lazy';
+              const descSpan = document.createElement('div');
+              descSpan.className = 'desc';
+              descSpan.textContent = description || '(no description)';
               const delBtn = document.createElement('button');
               delBtn.className = 'delete-btn';
               delBtn.innerHTML = '🗑️';
               delBtn.setAttribute('data-url', url);
-              delBtn.setAttribute('data-index', index);
               delBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const urlToDelete = this.getAttribute('data-url');
                 deleteImage(urlToDelete);
               });
-              item.appendChild(img);
-              item.appendChild(delBtn);
-              previewGrid.appendChild(item);
+              div.appendChild(img);
+              div.appendChild(descSpan);
+              div.appendChild(delBtn);
+              previewGrid.appendChild(div);
             });
           }
         } else {
-          // Create document if it doesn't exist
           await db.collection('gallery').doc('images').set({ urls: [] });
           loadPreview();
         }
@@ -242,11 +259,14 @@
       if (!confirm('Are you sure you want to delete this image from the gallery?')) return;
       try {
         const docRef = db.collection('gallery').doc('images');
-        await docRef.update({
-          urls: firebase.firestore.FieldValue.arrayRemove(url)
-        });
-        setStatus(uploadStatus, '✅ Image deleted from gallery!', 'success');
-        loadPreview(); // Refresh preview
+        const doc = await docRef.get();
+        if (doc.exists) {
+          const items = doc.data().urls || [];
+          const newItems = items.filter(item => (typeof item === 'string' ? item : item.url) !== url);
+          await docRef.update({ urls: newItems });
+          setStatus(uploadStatus, '✅ Image deleted from gallery!', 'success');
+          loadPreview();
+        }
       } catch (err) {
         console.error('Delete error:', err);
         setStatus(uploadStatus, '❌ Delete failed: ' + err.message, 'error');
@@ -293,6 +313,8 @@
         return;
       }
 
+      const description = descInput.value.trim();
+
       uploadBtn.disabled = true;
       progressContainer.style.display = 'block';
       progressBar.style.width = '0%';
@@ -317,7 +339,7 @@
           const data = JSON.parse(xhr.responseText);
           const url = data.secure_url;
           setStatus(uploadStatus, '✅ Uploaded to Cloudinary! Saving to gallery...', 'info');
-          saveToFirestore(url);
+          saveToFirestore(url, description);
         } else {
           let errorMsg = 'Unknown error';
           try {
@@ -339,38 +361,29 @@
       xhr.send(formData);
     });
 
-    // --- Save URL to Firestore ---
-    async function saveToFirestore(url) {
+    // --- Save URL + Description to Firestore ---
+    async function saveToFirestore(url, description) {
       try {
         const docRef = db.collection('gallery').doc('images');
-        await docRef.update({
-          urls: firebase.firestore.FieldValue.arrayUnion(url)
-        });
+        const doc = await docRef.get();
+        let items = [];
+        if (doc.exists) {
+          items = doc.data().urls || [];
+        }
+        // Add new item as object with url and description
+        items.push({ url: url, description: description || '' });
+        await docRef.set({ urls: items });
         setStatus(uploadStatus, '✅ Image added to gallery!', 'success');
         uploadBtn.disabled = false;
         progressContainer.style.display = 'none';
         fileInput.value = '';
+        descInput.value = '';
         loadPreview();
       } catch (err) {
         console.error('Error saving to Firestore:', err);
-        if (err.message && err.message.includes('document does not exist')) {
-          try {
-            await db.collection('gallery').doc('images').set({ urls: [url] });
-            setStatus(uploadStatus, '✅ Image added to gallery!', 'success');
-            uploadBtn.disabled = false;
-            progressContainer.style.display = 'none';
-            fileInput.value = '';
-            loadPreview();
-          } catch (err2) {
-            setStatus(uploadStatus, '❌ Failed to save to gallery: ' + err2.message, 'error');
-            uploadBtn.disabled = false;
-            progressContainer.style.display = 'none';
-          }
-        } else {
-          setStatus(uploadStatus, '❌ Failed to save to gallery: ' + err.message, 'error');
-          uploadBtn.disabled = false;
-          progressContainer.style.display = 'none';
-        }
+        setStatus(uploadStatus, '❌ Failed to save to gallery: ' + err.message, 'error');
+        uploadBtn.disabled = false;
+        progressContainer.style.display = 'none';
       }
     }
 
