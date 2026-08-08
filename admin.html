@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bakery Admin – Upload Gallery</title>
+  <style>
+    body { background: #0B0B0B; color: #F8F6F0; font-family: 'Montserrat', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+    .container { max-width: 700px; width: 100%; background: #151515; padding: 2rem; border-radius: 20px; border: 1px solid #D4AF37; }
+    h1 { color: #D4AF37; font-family: 'Playfair Display', serif; text-align: center; }
+    input, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: none; }
+    input { background: #222; color: #fff; border: 1px solid #D4AF37; }
+    button { background: #D4AF37; color: #000; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    button:hover { background: #B8962E; }
+    #gallery-preview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    #gallery-preview img { max-width: 150px; max-height: 150px; border-radius: 10px; border: 2px solid #D4AF37; }
+    .hidden { display: none; }
+    .error { color: #ff6b6b; display: none; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>🧁 Gallery Admin</h1>
+  <div id="login-section">
+    <input type="password" id="admin-password" placeholder="Admin Password" />
+    <button id="login-btn">Login</button>
+    <p id="login-error" class="error">❌ Incorrect password</p>
+  </div>
+  <div id="upload-section" class="hidden">
+    <p style="color: #a6977d;">Upload new bakery images. They will appear in the preview below.</p>
+    <div id="upload_widget_container"></div>
+    <hr style="border-color: #D4AF37; margin: 20px 0;" />
+    <h3 style="color: #D4AF37;">Recent Uploads</h3>
+    <p style="color: #a6977d; font-size: 14px;">After uploading, copy the URL from the alert box and add it to your <code>gallery.json</code> file.</p>
+    <div id="gallery-preview"></div>
+  </div>
+</div>
+
+<script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+<script>
+  // === CONFIGURATION ===
+  const API_BASE = 'https://bakery-upload-server.onrender.com'; // 🔁 CHANGE TO YOUR RENDER URL
+  const CLOUD_NAME = 'dwitbu0d';
+  const UPLOAD_PRESET = 'bridgetsbakery'; // your preset name (no apostrophe)
+
+  let adminPassword = '';
+
+  const loginSection = document.getElementById('login-section');
+  const uploadSection = document.getElementById('upload-section');
+  const passwordInput = document.getElementById('admin-password');
+  const loginBtn = document.getElementById('login-btn');
+  const loginError = document.getElementById('login-error');
+  const galleryPreview = document.getElementById('gallery-preview');
+
+  // Load previously uploaded images from localStorage (temporary preview)
+  function loadGallery() {
+    const stored = JSON.parse(localStorage.getItem('bakeryGallery') || '[]');
+    stored.forEach(url => {
+      const img = document.createElement('img');
+      img.src = url;
+      galleryPreview.appendChild(img);
+    });
+  }
+
+  function addImageToGallery(url) {
+    const img = document.createElement('img');
+    img.src = url;
+    galleryPreview.appendChild(img);
+    const stored = JSON.parse(localStorage.getItem('bakeryGallery') || '[]');
+    stored.push(url);
+    localStorage.setItem('bakeryGallery', JSON.stringify(stored));
+  }
+
+  loginBtn.addEventListener('click', async () => {
+    const password = passwordInput.value.trim();
+    if (!password) return;
+    try {
+      const response = await fetch(`${API_BASE}/api/sign?password=${password}`);
+      if (!response.ok) { loginError.style.display = 'block'; return; }
+      loginError.style.display = 'none';
+      adminPassword = password;
+      loginSection.style.display = 'none';
+      uploadSection.classList.remove('hidden');
+      loadGallery();
+      initUploadWidget();
+    } catch {
+      loginError.style.display = 'block';
+    }
+  });
+
+  let widget;
+  function initUploadWidget() {
+    if (widget) return;
+    widget = cloudinary.createUploadWidget({
+      cloudName: CLOUD_NAME,
+      uploadPreset: UPLOAD_PRESET,
+      apiKey: '',
+      uploadSignature: function(callback, params) {
+        fetch(`${API_BASE}/api/sign?password=${adminPassword}`)
+          .then(res => res.json())
+          .then(data => {
+            callback(data.signature, data.timestamp, data.apiKey);
+          })
+          .catch(console.error);
+      }
+    }, (error, result) => {
+      if (!error && result && result.event === 'success') {
+        const url = result.info.secure_url;
+        addImageToGallery(url);
+        // Show the URL in a popup for easy copying
+        alert('✅ Upload successful!\n\nImage URL:\n' + url + '\n\n📌 Copy this URL and add it to your gallery.json file.');
+      }
+    });
+    const container = document.getElementById('upload_widget_container');
+    container.innerHTML = '';
+    const btn = document.createElement('button');
+    btn.textContent = '📸 Upload New Image';
+    btn.style.cssText = 'padding: 12px 24px; background: #D4AF37; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%;';
+    btn.onclick = () => widget.open();
+    container.appendChild(btn);
+  }
+</script>
+</body>
+</html>
