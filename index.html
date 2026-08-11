@@ -10,6 +10,10 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧁</text></svg>" />
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧁</text></svg>" />
 
+    <!-- PWA manifest -->
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#D4AF37" />
+
     <!-- Open Graph -->
     <meta property="og:title" content="Bridget's Bakery | Artisan Cakes &amp; Cupcakes in Nairobi" />
     <meta property="og:description" content="Order artisan cakes, cupcakes, and cookies from Chef Briget." />
@@ -346,16 +350,50 @@
             background: transparent;
             color: var(--gold);
             border-color: var(--gold);
-            margin-right: 8px;
         }
         .footer-btn-gallery:hover {
             background: var(--gold);
             color: var(--black);
         }
 
+        /* ---------- ADMIN BUTTON – STANDALONE PROFESSIONAL ---------- */
+        .admin-section {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(212, 175, 55, 0.08);
+        }
+        .admin-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            color: rgba(212, 175, 55, 0.5);
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            background: transparent;
+        }
+        .admin-btn i {
+            font-size: 0.7rem;
+            opacity: 0.6;
+        }
+        .admin-btn:hover {
+            border-color: rgba(212, 175, 55, 0.5);
+            color: rgba(212, 175, 55, 0.8);
+            background: rgba(212, 175, 55, 0.04);
+        }
+
         .copyright {
             text-align: center;
-            margin-top: 48px;
+            margin-top: 32px;
             color: #5c5342;
             font-size: 0.8rem;
             letter-spacing: 1px;
@@ -394,6 +432,7 @@
             .products-grid { grid-template-columns: 1fr 1fr; }
             .product-image { height: 180px; }
             .gallery-item img { height: 200px; }
+            .admin-section { margin-top: 16px; padding-top: 12px; }
         }
         @media (max-width: 480px) {
             .hero-content h1 { font-size: 2rem; }
@@ -443,7 +482,6 @@
                             From our kitchen to yours — pure indulgence.
                         </p>
                         <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-                            <!-- REPLACED: Explore treats → View Gallery -->
                             <a href="#" data-view="gallery" style="display: inline-flex; align-items: center; gap: 10px; background: transparent; color: var(--gold); padding: 14px 36px; border-radius: 40px; font-weight: 700; text-decoration: none; transition: 0.3s; border: 2px solid var(--gold); letter-spacing: 1.5px;">
                                 <i class="fas fa-images"></i> View Gallery
                             </a>
@@ -605,12 +643,17 @@
                             <a href="tel:+254790499261" aria-label="Call">
                                 <i class="fas fa-phone-alt"></i>
                             </a>
-                            <a href="admin.html" aria-label="Admin Upload" style="color: #D4AF37; opacity: 0.25; font-size: 1.2rem; transition: 0.3s;" title="Admin Upload">
-                                <i class="fas fa-lock"></i>
-                            </a>
                         </div>
                     </div>
                 </div>
+
+                <!-- ===== ADMIN BUTTON – STANDALONE, PROFESSIONAL ===== -->
+                <div class="admin-section">
+                    <a href="admin.html" class="admin-btn">
+                        <i class="fas fa-lock"></i> Admin
+                    </a>
+                </div>
+
                 <div class="copyright">
                     &copy; 2026 <span>Pure Golden Bliss</span> — Artisan Baked Goods. Made with passion &amp; the finest ingredients.
                 </div>
@@ -659,7 +702,9 @@
 
     <!-- ========== JAVASCRIPT ========== -->
     <script>
-        // Firebase Config (same as before)
+        // ============================================================
+        //  FIREBASE CONFIG
+        // ============================================================
         const firebaseConfig = {
             apiKey: "AIzaSyC80QmqF9l03rzPOfCo9P8BEpj67B5_hvQ",
             authDomain: "bridgets-bakery-gallery.firebaseapp.com",
@@ -700,7 +745,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             initFirebase();
 
-            // Lightbox
+            // ===== LIGHTBOX =====
             const lightboxOverlay = document.getElementById('lightboxOverlay');
             const lightboxImg = document.getElementById('lightboxImg');
             const lightboxClose = document.getElementById('lightboxClose');
@@ -727,13 +772,13 @@
                 if (img) openLightbox(img.src, img.alt);
             });
 
-            // Floating WhatsApp
+            // ===== FLOATING WHATSAPP =====
             document.getElementById('floatWaBtn').addEventListener('click', function(e) {
                 e.preventDefault();
                 whatsappInquiry('general');
             });
 
-            // Sticky header + back to top
+            // ===== STICKY HEADER + BACK TO TOP =====
             const topBar = document.querySelector('.top-bar');
             const backToTop = document.getElementById('backToTop');
             const onScroll = () => {
@@ -745,7 +790,7 @@
             onScroll();
             backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-            // Mobile nav toggle
+            // ===== MOBILE NAV TOGGLE =====
             const navToggle = document.getElementById('navToggle');
             const navList = document.getElementById('navLinks');
             navToggle.addEventListener('click', () => {
@@ -761,7 +806,7 @@
                 });
             });
 
-            // View toggling
+            // ===== VIEW TOGGLING =====
             const mainContent = document.getElementById('mainContent');
             const galleryPage = document.getElementById('galleryPage');
             const navLinks = document.querySelectorAll('.nav-links a[data-view]');
@@ -810,7 +855,7 @@
                 });
             });
 
-            // Scroll reveal
+            // ===== SCROLL REVEAL =====
             const revealObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -830,7 +875,7 @@
                 });
             }, 500);
 
-            // Gallery load
+            // ===== LOAD GALLERY =====
             let galleryLoaded = false;
             async function loadGalleryFromFirestore() {
                 const grid = document.getElementById('galleryGrid');
@@ -877,10 +922,16 @@
                 }
             }
 
-            // Preload gallery in background
             setTimeout(() => {
                 if (db) loadGalleryFromFirestore();
             }, 1000);
+
+            // ===== SERVICE WORKER REGISTER (PWA) =====
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(() => console.log('Service Worker registered'))
+                    .catch(err => console.warn('SW registration failed:', err));
+            }
         });
 
         window.whatsappInquiry = whatsappInquiry;
